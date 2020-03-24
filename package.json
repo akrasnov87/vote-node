@@ -1,0 +1,43 @@
+{
+    "name": "mobnius-kes-node",
+    "version": "3.98.844",
+    "birthday": "2019-12-16",
+    "description": "Служба для получения данных от PostgreSQL",
+    "main": "bin/www",
+    "scripts": {
+        "start": "node ./bin/www"
+    },
+    "author": "Aleksandr Krasnov",
+    "license": "ISC",
+    "dependencies": {
+        "args-parser": "^1.1.0",
+        "cors": "latest",
+        "crypto": "^1.0.1",
+        "ejs": "latest",
+        "express": "latest",
+        "express-fileupload": "latest",
+        "express-session": "^1.15.6",
+        "form-data": "latest",
+        "http-errors": "^1.7.2",
+        "json-parser": "latest",
+        "log4js": "^4.2.0",
+        "mkdir-recursive": "^0.4.0",
+        "mobnius-extjs-view-generate": "git://git.appcode.pw/mobnius/extjs-view-generate.git",
+        "mobnius-packager": "git://git.appcode.pw/mobnius/packager.git",
+        "mobnius-pg-dbcontext": "git://git.appcode.pw/mobnius/pg-dbcontext.git",
+        "mobnius-rpc-file-manager": "git://git.appcode.pw/mobnius/rpc-file-manager.git",
+        "mobnius-schema-reader": "git://git.appcode.pw/mobnius/schema-reader.git",
+        "moment": "^2.24.0",
+        "morgan": "^1.9.1",
+        "node-config": "git://git.appcode.pw/node-config.git",
+        "package-manager": "git://git.appcode.pw/package-manager.git",
+        "rimraf": "^2.6.3",
+        "serve-favicon": "latest",
+        "socket.io": "^2.3.0",
+        "socket.io-redis": "^5.2.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/akrasnov87/kes-node.git"
+    }
+}

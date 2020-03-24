@@ -1,0 +1,7 @@
+[
+    <%- include('partials/useritem', { records: records, claims: claims, itemFilter: itemFilter, id: null }); %>
+    {
+        "xtype": "exititem",
+        "hidden": <% if(claims == undefined){%>true<%} else {%>false<%}%>
+    }
+]

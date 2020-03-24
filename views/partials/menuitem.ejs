@@ -1,0 +1,48 @@
+<% var items = records.filter(function(i){ return itemFilter(id, i, claims); });%>
+<% var count = items.length; var idx = 0; %>
+
+<%items.forEach(function(i){%>
+    <% idx++; %>
+    <% var children = records.filter(function(j){ return itemFilter(i.id, j) && j.visible == 1; });%>
+    { 
+        "text":"<%=i.name%>",
+        "tooltip":"<%=i.name%>",
+
+        <% if(children.length > 0) {%>
+            "children": [<%- include('../partials/menuitem', {records: records, itemFilter: itemFilter, claims: claims, id: i.id}); %>],
+            "expanded": <%=i.expanded == 1%>,
+            "selectable": <%=i.selectable == 1%>,
+        <% } else { %>
+            "leaf": true,
+        <%}%>
+        <%if(i.alias){%>
+        "domainType": "<%=i.alias%>",
+        <%}%>
+        <%if(i.icon_cls){%>
+        "iconCls":"<%=i.icon_cls%>",
+        <%}%>
+        <%if(i.icon){%>
+        "icon":"<%=i.icon%>",
+        <%}%>
+        <%if(i.creatable != undefined && i.creatable != null){%>
+        "creatable":<%=i.creatable == 1%>,
+        <%}%>
+        <%if(i.editable != undefined && i.editable != null){%>
+        "editable":<%=i.editable == 1%>,
+        <%}%>
+        <%if(i.deletable != undefined && i.deletable != null){%>
+        "deletable":<%=i.deletable == 1%>,
+        <%}%>
+        <%if(i.fullcontrol != undefined && i.fullcontrol != null){%>
+        "fullcontrol":<%=i.fullcontrol == 1%>,
+        <%}%>
+        <%if((i.visible != undefined && i.visible != null && i.visible == 0) || (children.length == 0 && i.leaf == 0)) {%>
+        "visible": false,
+        <%}%>
+        "viewType": "<%=i.view_type%>" 
+    }
+    <%if(idx != count){%>
+    ,
+    <%}%>
+<%});%>
+<%if(count > 0 && id == null){%>,<%}%>

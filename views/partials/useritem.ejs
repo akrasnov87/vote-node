@@ -1,0 +1,35 @@
+<% var items = records.filter(function(i){ return itemFilter(id, i, claims); });%>
+<% var count = items.length; var idx = 0; %>
+
+<%items.forEach(function(i){%>
+    <% idx++; %>
+    <% var children = records.filter(function(j){ return itemFilter(i.id, j) && j.visible == 1 });%>
+    { 
+        "xtype": "actionitem",
+        "text":"<%=i.name%>",
+
+        <% if(children.length > 0) {%>
+            menu: [<%- include('../partials/useritem', {records: records, claims: claims, itemFilter: itemFilter, id: i.id}); %>],
+        <%}%>
+        <%if(i.icon_cls){%>
+        "iconCls":"<%=i.icon_cls%>",
+        <%}%>
+        <%if(i.icon){%>
+        "icon":"<%=i.icon%>",
+        <%}%>
+        <%if(i.visible != undefined && i.visible != null) {%>
+        "visible":<%=i.visible == 1%>,
+        <%}%>
+        <%if(children.length == 0 && i.leaf == 0) {%>
+        "visible":false,
+        <%}%>
+        <%if(i.read_only != undefined && i.read_only != null){%>
+        "read_only":<%=i.read_only == 1%>,
+        <%}%>
+        "action": "<%=i.view_type%>" 
+    }
+    <%if(idx != count){%>
+    ,
+    <%}%>
+<%});%>
+<%if(count > 0 && id == null){%>,<%}%>

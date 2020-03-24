@@ -1,0 +1,6 @@
+/node_modules
+*-lock.json
+/js
+/logs
+.vscode
+/files
