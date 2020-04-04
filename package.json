@@ -1,7 +1,7 @@
 {
-    "name": "mobnius-kes-node",
+    "name": "vote-node",
     "version": "3.98.844",
-    "birthday": "2019-12-16",
+    "birthday": "2020-03-24",
     "description": "Служба для получения данных от PostgreSQL",
     "main": "bin/www",
     "scripts": {
