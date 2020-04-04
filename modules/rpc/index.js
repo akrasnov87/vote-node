@@ -10,7 +10,6 @@ var router = express.Router();
 var auditRouter = require('../system-logs/router/audit');
 var authUtil = require('../authorize/util');
 var shellContext = require('../custom-context/shell');
-var notificationContext = require('../custom-context/notification');
 var settingContext = require('../custom-context/setting');
 var userContext = require('../custom-context/user');
 var changePasswordRouter = require('./router/changePassword');
@@ -39,7 +38,7 @@ module.exports = function (auth_type) {
     // контекст данных по умолчанию
     contexts.push(localContext);
     contexts.push(shellContext);
-    contexts.push(notificationContext);
+
     contexts.push(userContext);
     contexts.push(settingContext);
 

@@ -1,5 +1,3 @@
-var socketUtils = require('./socket/utils');
-var logjs = require('./log');
 var args = require('args-parser')(process.argv);
 var conf = require('node-config')(__dirname, '../');
 
@@ -9,7 +7,7 @@ var conf = require('node-config')(__dirname, '../');
  * @param {string} tid идентификатор. Может быть пустым
  * @returns объект
  */
-exports.socketOkResultLayout = function(obj, tid) {
+exports.socketOkResultLayout = function (obj, tid) {
 
     var data = {
         meta: {
@@ -24,7 +22,7 @@ exports.socketOkResultLayout = function(obj, tid) {
         host: getCurrentHost()
     };
 
-    if(tid) {
+    if (tid) {
         data.tid = tid;
         data.meta.tid = tid;
     }
@@ -39,7 +37,7 @@ exports.socketOkResultLayout = function(obj, tid) {
  * @param {string} tid идентификатор. Может быть пустым
  * @returns объект
  */
-exports.socketFailResultLayout = function(message, code, tid) {
+exports.socketFailResultLayout = function (message, code, tid) {
 
     var data = {
         meta: {
@@ -53,7 +51,7 @@ exports.socketFailResultLayout = function(message, code, tid) {
         host: getCurrentHost()
     }
 
-    if(tid) {
+    if (tid) {
         data.tid = tid;
         data.meta.tid = tid;
     }
@@ -62,117 +60,12 @@ exports.socketFailResultLayout = function(message, code, tid) {
 }
 
 /**
- * Запись файла
- * @param {any} session сессия
- */
-exports.writeFile = function(session) {
-    var socketLog = socketUtils.log(session.request.socket, session.request.tid);
-
-    return new function() {
-
-        this.toResponce = function(id, name, bytes) {
-            if (!session.response.attachments) {
-                session.response.attachments = [];
-            }
-            session.response.attachments.push({
-                link: id,
-                name: name,
-                buffer: bytes
-            });
-        }
-
-        this.toError = function(record, message) {
-            record.__error = message;
-            logjs.error(record.__error);
-            socketLog.log(record.__error);
-        }
-
-        return this;
-    }
-}
-
-exports.fileReader = function(session) {
-    return new function() {
-        var files = session.request.attachments;
-
-        this.getFile = function(name) {
-            for (var i in files) {
-                var file = files[i];
-                if (file.name == name)
-                    return file;
-            }
-            return null;
-        }
-
-        return this;
-    }
-}
-
-/**
- * отслеживание прогресса обработки файлов
- * @param {any} logger socket log
- * @param {number} totalCount общее количество данных
- */
-exports.progressFile = function(logger, totalCount) {
-    return new function() {
-        var idx = 0;
-        var avg = [];
-        var startDt = Date.now();
-
-        var iterDt = 0;
-
-        this.init = function(time){
-            logger.log('Получено из БД ' + totalCount + ' файлов за ' + time + ' мс.');
-        }
-
-        this.beforeNext = function(){
-            iterDt = Date.now();
-        }
-
-        this.next = function(message) {
-            idx++;
-            var time = Date.now() - iterDt;
-            avg.push(time);
-            logger.log('[LOGS]' + '(' + idx + '/' + totalCount + ')');
-            logger.log('Файл ' + idx + '/' + totalCount + ' ' + message + '. Выполнено за ' + time + ' мсек.');
-        }
-
-        this.finish = function(message) {
-            var sum = 0;
-            for (var i in avg) {
-                sum += avg[i];
-            }
-
-            var avgMessage = 'Средняя скорость обработки ' + (sum / totalCount).toFixed(2) + ' мс.';
-            logjs.debug(avgMessage);
-            logger.log(avgMessage);
-            logjs.debug(message);
-
-            idx = 0;
-            avg = [];
-            startDt = null;
-            iterDt = null;
-        }
-
-        this.getTime = function() {
-            return (Date.now() - startDt) / 1000;
-        }
-
-        this.getTotalCount = function() {
-            return totalCount;
-        }
-
-        return this;
-    }
-}
-
-/**
  * Создание мета-блока
  * @param {to} string кому
  * @param {from} string от кого
  * @param {groups} string отправить группе
  */
-exports.createMeta = function(to, from, groups) {
+exports.createMeta = function (to, from, groups) {
     return {
         to: to,
         from: from,
@@ -195,7 +88,7 @@ function getCurrentHost() {
  * Получение виртуального каталога
  * @returns {string}
  */
-exports.getVirtualDirPath = function() {
+exports.getVirtualDirPath = function () {
     return args.virtual_dir_path || conf.get('virtual_dir_path');
 }
 
@@ -203,6 +96,6 @@ exports.getVirtualDirPath = function() {
  * Строка подключения к БД
  * @returns {string}
  */
-exports.getConnectionString = function() {
+exports.getConnectionString = function () {
     return args.connection_string || conf.get('connectionString');
 }
