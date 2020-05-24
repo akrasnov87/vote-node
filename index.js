@@ -13,6 +13,7 @@ var join = path.join;
 var fileUpload = require('express-fileupload');
 var rpc = require('./modules/rpc/index');
 var exists = require('./router/exists');
+var upload = require('./router/upload');
 var logjs = require('./modules/log');
 var utils = require('./modules/utils');
 
@@ -57,6 +58,7 @@ app.use(vPath + '/send', require('./router/send')('basic'));
 
 // проверка на доступность сервера
 app.use(vPath + '/exists', exists());
+app.use(vPath + '/upload', upload());
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

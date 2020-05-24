@@ -29,6 +29,7 @@
         "mobnius-schema-reader": "git://git.appcode.pw/mobnius/schema-reader.git",
         "moment": "^2.24.0",
         "morgan": "^1.9.1",
+        "node-apk-parser": "^0.2.3",
         "node-config": "git://git.appcode.pw/node-config.git",
         "package-manager": "git://git.appcode.pw/package-manager.git",
         "rimraf": "^2.6.3",

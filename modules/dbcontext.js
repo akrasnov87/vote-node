@@ -2606,8 +2606,8 @@ exports.cv_user_bind = function (session) {
  * Схема: dbo
  * Поля:
  *      id:uuid - Идентификатор
- *      c_subscr:text - Номер ЛС
- *      c_device:text - Номер ПУ
+ *      c_subscr:text - Полный номер квартиры
+ *      c_device:text - Номер квартиры состоящий только из чисел
  *      jb_tel:jsonb - Номер телефона
  *      jb_email:jsonb - Эл. почта
  *      n_longitude:numeric - Долгота
@@ -3443,6 +3443,7 @@ exports.sd_client_errors = function (session) {
  *      f_division:integer (core.sd_divisions.id) - Отделение
  *      c_app_name:text - Имя приложения
  *      b_hidden:boolean - Скрыт
+ *      ba_file:bytea - ba_file
  * // примеры выборки
  * db.sd_digests().Query({...}, function(data) {
  *      if(data.meta.success) {
