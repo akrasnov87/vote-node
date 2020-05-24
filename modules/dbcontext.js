@@ -3444,6 +3444,7 @@ exports.sd_client_errors = function (session) {
  *      c_app_name:text - Имя приложения
  *      b_hidden:boolean - Скрыт
  *      ba_file:bytea - ba_file
+ *      d_date:date - d_date
  * // примеры выборки
  * db.sd_digests().Query({...}, function(data) {
  *      if(data.meta.success) {

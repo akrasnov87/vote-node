@@ -18,6 +18,8 @@ module.exports = function () {
             if (data.meta.success) {
                 res.setHeader("Content-Type", 'application/vnd.android.package-archive');
                 res.send(data.result.records[0].ba_file);
+            } else {
+                res.send(data.meta.msg);
             }
         });
     });
