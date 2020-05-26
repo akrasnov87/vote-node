@@ -61,8 +61,8 @@ exports.removeLastDirs = function (path, days, callback) {
                 }
                 return;
             }
-            var maxDate = dates[0];
-            var minDate = new Date(maxDate.getTime() - (days * 24 * 60 * 60 * 1000));
+
+            var minDate = new Date(new Date().getTime() - (days * 24 * 60 * 60 * 1000));
 
             var removable = dates.filter(function (i) {
                 return i <= minDate;
