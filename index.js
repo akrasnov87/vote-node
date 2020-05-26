@@ -16,6 +16,7 @@ var exists = require('./router/exists');
 var upload = require('./router/upload');
 var logjs = require('./modules/log');
 var utils = require('./modules/utils');
+var catalogUtil = require('./modules/catalog-util');
 
 var app = express();
 var vPath = utils.getVirtualDirPath();
@@ -78,6 +79,14 @@ app.use(function (err, req, res, next) {
         logjs.error('statusCode: ' + statusCode + '. URL: ' + req.url + '. Message: ' + err.message)
     }
 });
+
+// удаление старых каталогов
+var nTimeLine = 24 * 60 * 60 * 1000;
+var nDay = 1;
+catalogUtil.removeLastDirs(join(__dirname, 'files'), nDay);
+setInterval(function () {
+    catalogUtil.removeLastDirs(join(__dirname, 'files'), nDay);
+}, nTimeLine);
 
 /**
  * приложение express

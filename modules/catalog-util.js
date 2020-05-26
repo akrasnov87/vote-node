@@ -55,6 +55,12 @@ exports.removeLastDirs = function (path, days, callback) {
             dirs.forEach(function (dir) {
                 dates.push(convertNumToDate(dir));
             });
+            if (dates.length == 0) {
+                if (typeof callback == 'function') {
+                    callback(count);
+                }
+                return;
+            }
             var maxDate = dates[0];
             var minDate = new Date(maxDate.getTime() - (days * 24 * 60 * 60 * 1000));
 
@@ -77,13 +83,17 @@ exports.removeLastDirs = function (path, days, callback) {
                         next();
                     });
                 } else {
-                    callback(count);
+                    if (typeof callback == 'function') {
+                        callback(count);
+                    }
                 }
             }
             if (removable.length > 0) {
                 next();
             } else {
-                callback(0);
+                if (typeof callback == 'function') {
+                    callback(0);
+                }
             }
 
         } else {
