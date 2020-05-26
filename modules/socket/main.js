@@ -21,10 +21,6 @@ var join = require('path').join;
 var conf = require('node-config')(join(__dirname, '../', '../'));
 var rpcHandler = require('./rpc-handler');
 var synchronizationHandler = require('./synchronization-handler');
-var trackingHandler = require('./tracking-handler');
-var networkHandler = require('./network-handler');
-var deviceInfoHandler = require('./device-info-handler');
-var notificationHandler = require('./notification-handler');
 var uploadHandler = require('./upload-handler');
 var downloadHandler = require('./download-handler');
 var connectionStack = require('./connection-stack');
@@ -79,15 +75,14 @@ exports.init = function (opts) {
  */
 exports.on = function (io_obj) {
     io = io_obj;
-    if(conf.get('redis_host')) {
+    if (conf.get('redis_host')) {
         io.adapter(redis({ host: conf.get('redis_host'), port: 6379 }));
     }
-    
+
     io.on('connection', function (socket) {
         socket.on('disconnect', function (reason) {
-            if(socket.user != null) {
+            if (socket.user != null) {
                 var userName = connectionStack.remove(socket);
-                networkHandler(socket.user, io, 'ONLINE');
                 logjs.debug('Отключено socket-соединение с сервером для ' + (userName ? 'пользователя ' + userName : 'socket ' + (socket.imei || socket.id)) + '. Причина: ' + reason);
             }
         });
@@ -105,16 +100,12 @@ exports.on = function (io_obj) {
                     logjs.debug('Подключено socket-соединение с сервером для ' + (userName ? 'пользователя ' + userName : 'socket ' + socket.id) + '.');
                     // тут пользователь авторизован и может работать с socket данными
                     socket.on('rpc', rpcHandler(req, res, socket));
-                    socket.on('tracking', trackingHandler(req, res, socket));
-                    socket.on('deviceinfo', deviceInfoHandler(req, res, socket));
-                    socket.on('notification', notificationHandler(req, res, socket));
                     socket.on('synchronization', synchronizationHandler(req, res, socket));
                     socket.on('upload', uploadHandler(req, res, socket));
                     socket.on('download', downloadHandler(req, res, socket));
 
                     // информирование системы о том, что пользователь был зарегистрирован и обработчики настроены
                     socketUtils.registry(socket);
-                    networkHandler(res.user, io, 'ONLINE');
                 } else {
                     logjs.debug('Создание socket-подключения не авторизованным пользователем. socket_id=' + (socket.imei || socket.id));
                     socketUtils.noAuth(socket);

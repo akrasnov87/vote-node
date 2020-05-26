@@ -40,11 +40,3 @@ node bin/www -port=5000 --debug
 node version 0.0
 ```
 , где 0.0 - основная версия приложения
-
-#### отправка уведомлений
-
-Применяется модуль ./modules/socket/mailer В нем есть метод sendText
-
-```
-sendText(socket, 'login - от кого', 'login - кому', 'группа если нужно');
-```

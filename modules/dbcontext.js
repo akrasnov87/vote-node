@@ -1236,6 +1236,29 @@ exports.cf_imp_by_user = function (session) {
 }
 
 /**
+ * Генерация маршрутов для пользователей
+ * @example
+ * Тип: FUNCTION
+ * Схема: dbo
+ * // примеры выборки
+ * db.cf_imp_generate_routes().Query({params:{...}}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ */
+exports.cf_imp_generate_routes = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.call('dbo', 'cf_imp_generate_routes', query_param.params, callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_imp_generate_routes()', query_param, filter.security(session), callback);
+        }
+    }
+}
+
+/**
  * Импорт точек маршрута
  * @example
  * Тип: FUNCTION
@@ -2606,8 +2629,10 @@ exports.cv_user_bind = function (session) {
  * Схема: dbo
  * Поля:
  *      id:uuid - Идентификатор
- *      c_subscr:text - Полный номер квартиры
- *      c_device:text - Номер квартиры состоящий только из чисел
+ *      c_appartament_num:text - Номер квартиры (строковая)
+ *      n_appartament_num:integer - Номер квартиры
+ *      c_house_num:text - Номер дома (строковая)
+ *      n_house_num:integer - Номер дома
  *      jb_tel:jsonb - Номер телефона
  *      jb_email:jsonb - Эл. почта
  *      n_longitude:numeric - Долгота
@@ -3443,8 +3468,6 @@ exports.sd_client_errors = function (session) {
  *      f_division:integer (core.sd_divisions.id) - Отделение
  *      c_app_name:text - Имя приложения
  *      b_hidden:boolean - Скрыт
- *      ba_file:bytea - ba_file
- *      d_date:date - d_date
  * // примеры выборки
  * db.sd_digests().Query({...}, function(data) {
  *      if(data.meta.success) {

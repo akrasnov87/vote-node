@@ -54,7 +54,6 @@ app.use(vPath + '/', express.static(join(__dirname, 'files')));
 
 app.use(vPath, rpc('basic'));
 app.use(vPath, require('./router/synchronization')('basic'));
-app.use(vPath + '/send', require('./router/send')('basic'));
 
 // проверка на доступность сервера
 app.use(vPath + '/exists', exists());

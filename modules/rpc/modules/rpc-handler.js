@@ -6,7 +6,6 @@
 
 var rpcQuery = require('../modules/rpc-query');
 var accessFilter = require('../modules/access-filter');
-var rpcInjection = require('../../rpc-injection');
 var logjs = require('../../log');
 var utils = require('../../utils');
 
@@ -28,7 +27,7 @@ module.exports = function (req, res, finish) {
         if (item) {
             logjs.debug('RPC запрос пользователя ' + res.user.c_login + ': ' + JSON.stringify(item));
             var alias = item.data[0].alias;
-            if(alias) {
+            if (alias) {
                 /**
                  * псевдоним результата запроса
                  */
@@ -55,12 +54,11 @@ module.exports = function (req, res, finish) {
                         result.authorizeTime = res.authorizeTime;
                         result.rpcTime = new Date() - dt;
                         result.host = utils.getCurrentHost();
-                        if(alias) {
+                        if (alias) {
                             result.action = alias;
                         }
                         results.push(result);
-                        // добавлена injection
-                        rpcInjection.handler(sessionState, item.action, item.method, item.data[0], result);
+
                         next(callback);
                     });
                 } else {
