@@ -2535,6 +2535,45 @@ exports.cv_house = function (session) {
 }
 
 /**
+ * 
+ * @example
+ * Тип: VIEW
+ * Схема: dbo
+ * Поля:
+ *      c_area:text - c_area
+ *      c_fio:text - c_fio
+ *      c_uik_name:text - c_uik_name
+ *      f_type:integer - f_type
+ *      n_all:bigint - n_all
+ *      n_count:bigint - n_count
+ *      n_today_count:bigint - n_today_count
+ *      n_uik:bigint - n_uik
+ *      user_id:integer - user_id
+ * // примеры выборки
+ * db.cv_userinroutes().Query({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры получения количества записей
+ * db.cv_userinroutes().Count({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // results.result.total
+ *      }   
+ * });
+ */
+exports.cv_userinroutes = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.select('dbo', 'cv_userinroutes', query_param, filter.security(session), callback);
+        },
+        Count: function (query_param, callback) {
+            provider.count('dbo', 'cv_userinroutes', query_param, callback);
+        }
+    }
+}
+
+/**
  * Сведения о Кураторах, ОзаУИК и волонтерах, закрепленных за УИК
  * @example
  * Тип: VIEW
@@ -2726,7 +2765,6 @@ exports.ed_registr_pts = function (session) {
  *      f_user:integer (core.pd_users.id) - Пользователь
  *      f_role:integer (core.pd_roles.id) - Роль
  *      c_name:text - Табл./Предст./Функц.
- *      f_action:integer (core.sd_ui_actions.id) - Действие
  *      c_criteria:text - Серверный фильтр
  *      c_path:text - Путь в файловой системе
  *      c_function:text - Функция RPC или её часть
@@ -2801,98 +2839,6 @@ exports.pd_accesses = function (session) {
         },
         Count: function (query_param, callback) {
             provider.count('core', 'pd_accesses', query_param, callback);
-        }
-    }
-}
-
-/**
- * Навигация
- * @example
- * Тип: BASE TABLE
- * Первичный ключ: id
- * Схема: core
- * Поля:
- *      id:integer - Идентификатор
- *      c_view_type:text - Тип представления
- *      c_alias:text - Корневое представление
- *      b_leaf:boolean - Без дочерних элементов
- *      c_icon_cls:text - Класс иконки
- *      f_parent:integer (core.pd_navigations.id) - Родительская запись
- *      c_name:text - Заголовок
- *      b_default_token:boolean - Страница по умолчанию
- *      c_type:text - Тип меню
- *      b_visible:boolean - Видимость
- *      c_icon:text - Иконка в формате base64
- *      b_selectable:boolean - Выбираемый
- *      b_expanded:boolean - В развернутом виде
- *      n_sort:integer - Сортировка
- *      b_not_auth:boolean - Доступен без авторизации
- *      sn_delete:boolean - Удален
- * // примеры выборки
- * db.pd_navigations().Query({...}, function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
-  * // примеры выборки через функцию
- * db.cf_pd_navigations().Select({...}, function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- * // примеры добавления
- * db.pd_navigations().Add({...}|[{...}], function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- * // примеры обновления
- * db.pd_navigations().Update({id:any ...}|[{id:any ...}], function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- * // примеры создания или обновления
- * db.pd_navigations().AddOrUpdate({id:any ...}, function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- * // примеры удаления
- * db.pd_navigations().Delete({id:any ...}|[{id:any ...}], function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
-  * // примеры получения количества записей
- * db.pd_navigations().Count({...}, function(data) {
- *      if(data.meta.success) {
- *          // results.result.total
- *      }   
- * });
- */
-exports.pd_navigations = function (session) {
-    return {
-        Query: function (query_param, callback) {
-            provider.select('core', 'pd_navigations', query_param, filter.security(session), callback);
-        },
-        Select: function (query_param, callback) {
-            provider.select('core', 'cf_mui_pd_navigations()', query_param, filter.security(session), callback);
-        },
-        Add: function (data, callback) {
-            provider.insert('core', 'pd_navigations', data, callback);
-        },
-        AddOrUpdate: function (data, callback) {
-            provider.insertOrUpdate('core', 'pd_navigations', 'id', data, callback);
-        },
-        Update: function (data, callback) {
-            provider.update('core', 'pd_navigations', 'id', data, callback);
-        },
-        Delete: function (data, callback) {
-            provider.delete('core', 'pd_navigations', 'id', data, callback);
-        },
-        Count: function (query_param, callback) {
-            provider.count('core', 'pd_navigations', query_param, callback);
         }
     }
 }
@@ -3252,75 +3198,6 @@ exports.pf_accesses = function (session) {
         },
         Select: function (query_param, callback) {
             provider.select('core', 'pf_accesses()', query_param, filter.security(session), callback);
-        }
-    }
-}
-
-/**
- * Получение списка хранилищ
- * @example
- * Тип: FUNCTION
- * Схема: core
- * // примеры выборки
- * db.pf_stores().Query({params:{...}}, function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- */
-exports.pf_stores = function (session) {
-    return {
-        Query: function (query_param, callback) {
-            provider.call('core', 'pf_stores', query_param.params, callback);
-        },
-        Select: function (query_param, callback) {
-            provider.select('core', 'pf_stores()', query_param, filter.security(session), callback);
-        }
-    }
-}
-
-/**
- * возвращается список кнопок, которые могут выводиться для viewId
- * @example
- * Тип: FUNCTION
- * Схема: core
- * // примеры выборки
- * db.pf_ui_actions().Query({params:{...}}, function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- */
-exports.pf_ui_actions = function (session) {
-    return {
-        Query: function (query_param, callback) {
-            provider.call('core', 'pf_ui_actions', query_param.params, callback);
-        },
-        Select: function (query_param, callback) {
-            provider.select('core', 'pf_ui_actions()', query_param, filter.security(session), callback);
-        }
-    }
-}
-
-/**
- * Безопасность
- * @example
- * Тип: FUNCTION
- * Схема: core
- * // примеры выборки
- * db.pf_ui_navigations().Query({params:{...}}, function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- */
-exports.pf_ui_navigations = function (session) {
-    return {
-        Query: function (query_param, callback) {
-            provider.call('core', 'pf_ui_navigations', query_param.params, callback);
-        },
-        Select: function (query_param, callback) {
-            provider.select('core', 'pf_ui_navigations()', query_param, filter.security(session), callback);
         }
     }
 }
@@ -3696,184 +3573,6 @@ exports.sd_subdivisions = function (session) {
         },
         Count: function (query_param, callback) {
             provider.count('core', 'sd_subdivisions', query_param, callback);
-        }
-    }
-}
-
-/**
- * Операции
- * @example
- * Тип: BASE TABLE
- * Первичный ключ: id
- * Схема: core
- * Поля:
- *      id:integer - Идентификатор
- *      c_view_id:text - Идентификатор представления
- *      c_text:text - Имя команды
- *      c_icon:text - Иконка
- *      c_operation:text - Метод
- *      c_action_view:text - Представление
- *      c_xtype:text - Тип операции
- *      c_place:text - Место установки
- *      n_sort:integer - Сортировка по умолчанию
- *      c_tooltip:text - Описание операции
- *      c_ui:text - Стиль
- *      f_parent:integer (core.sd_ui_actions.id) - Родительский элемент
- *      c_selectiondependencytype:text - Условие выполнения
- *      c_confirmationmessage:text - Сообщение с текстом перед выполнением
- *      c_javascript_fn:text - JavaScript-функция
- *      sn_delete:boolean - Удален
- * // примеры выборки
- * db.sd_ui_actions().Query({...}, function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
-  * // примеры выборки через функцию
- * db.cf_sd_ui_actions().Select({...}, function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- * // примеры добавления
- * db.sd_ui_actions().Add({...}|[{...}], function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- * // примеры обновления
- * db.sd_ui_actions().Update({id:any ...}|[{id:any ...}], function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- * // примеры создания или обновления
- * db.sd_ui_actions().AddOrUpdate({id:any ...}, function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- * // примеры удаления
- * db.sd_ui_actions().Delete({id:any ...}|[{id:any ...}], function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
-  * // примеры получения количества записей
- * db.sd_ui_actions().Count({...}, function(data) {
- *      if(data.meta.success) {
- *          // results.result.total
- *      }   
- * });
- */
-exports.sd_ui_actions = function (session) {
-    return {
-        Query: function (query_param, callback) {
-            provider.select('core', 'sd_ui_actions', query_param, filter.security(session), callback);
-        },
-        Select: function (query_param, callback) {
-            provider.select('core', 'cf_mui_sd_ui_actions()', query_param, filter.security(session), callback);
-        },
-        Add: function (data, callback) {
-            provider.insert('core', 'sd_ui_actions', data, callback);
-        },
-        AddOrUpdate: function (data, callback) {
-            provider.insertOrUpdate('core', 'sd_ui_actions', 'id', data, callback);
-        },
-        Update: function (data, callback) {
-            provider.update('core', 'sd_ui_actions', 'id', data, callback);
-        },
-        Delete: function (data, callback) {
-            provider.delete('core', 'sd_ui_actions', 'id', data, callback);
-        },
-        Count: function (query_param, callback) {
-            provider.count('core', 'sd_ui_actions', query_param, callback);
-        }
-    }
-}
-
-/**
- * Критерии
- * @example
- * Тип: BASE TABLE
- * Первичный ключ: id
- * Схема: core
- * Поля:
- *      id:integer - Идентификатор
- *      c_view_id:text - Идентификатор представления
- *      c_type:text - Тип
- *      c_filter_criteria:text - Фильтр
- *      c_filter_fn:text - JavaScript-функция
- *      c_cls:text - CSS класс
- *      c_styles:text - Стили|Свойства
- *      c_message:text - Сообщение
- *      c_roles:text - Роли
- *      c_field:text - Поле
- * // примеры выборки
- * db.sd_ui_criteries().Query({...}, function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
-  * // примеры выборки через функцию
- * db.cf_sd_ui_criteries().Select({...}, function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- * // примеры добавления
- * db.sd_ui_criteries().Add({...}|[{...}], function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- * // примеры обновления
- * db.sd_ui_criteries().Update({id:any ...}|[{id:any ...}], function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- * // примеры создания или обновления
- * db.sd_ui_criteries().AddOrUpdate({id:any ...}, function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- * // примеры удаления
- * db.sd_ui_criteries().Delete({id:any ...}|[{id:any ...}], function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
-  * // примеры получения количества записей
- * db.sd_ui_criteries().Count({...}, function(data) {
- *      if(data.meta.success) {
- *          // results.result.total
- *      }   
- * });
- */
-exports.sd_ui_criteries = function (session) {
-    return {
-        Query: function (query_param, callback) {
-            provider.select('core', 'sd_ui_criteries', query_param, filter.security(session), callback);
-        },
-        Select: function (query_param, callback) {
-            provider.select('core', 'cf_mui_sd_ui_criteries()', query_param, filter.security(session), callback);
-        },
-        Add: function (data, callback) {
-            provider.insert('core', 'sd_ui_criteries', data, callback);
-        },
-        AddOrUpdate: function (data, callback) {
-            provider.insertOrUpdate('core', 'sd_ui_criteries', 'id', data, callback);
-        },
-        Update: function (data, callback) {
-            provider.update('core', 'sd_ui_criteries', 'id', data, callback);
-        },
-        Delete: function (data, callback) {
-            provider.delete('core', 'sd_ui_criteries', 'id', data, callback);
-        },
-        Count: function (query_param, callback) {
-            provider.count('core', 'sd_ui_criteries', query_param, callback);
         }
     }
 }

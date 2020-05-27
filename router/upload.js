@@ -31,6 +31,10 @@ module.exports = function () {
                 res.json({
                     version: data.result.records[0].c_version
                 });
+            } else {
+                res.json({
+                    version: '0.0.0.0'
+                });
             }
         });
     });
