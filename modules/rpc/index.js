@@ -15,11 +15,9 @@ var userContext = require('../custom-context/user');
 var changePasswordRouter = require('./router/changePassword');
 var rpcRouter = require('./router/rpc');
 var viewActionsRouter = require('./router/viewactions');
-var menuRouter = require('./router/menu');
 var cacheRouter = require('./router/cache');
 var socket = require('../socket/main');
 var userRouter = require('./router/user');
-var rpcInjection = require('../rpc-injection');
 var rpcQuery = require('./modules/rpc-query');
 var db = require('../dbcontext');
 
@@ -31,9 +29,6 @@ var localContext = require('../localcontext');
  */
 module.exports = function (auth_type) {
     var contexts = [];
-
-    // добавляем injection
-    rpcInjection.add('accesses', require('../injections/accesses').reload);
 
     // контекст данных по умолчанию
     contexts.push(localContext);
@@ -51,7 +46,6 @@ module.exports = function (auth_type) {
 
     router.use(auditRouter(auth_type));
     router.use(rpcRouter(auth_type));
-    router.use(menuRouter(auth_type));
     router.use(viewActionsRouter(auth_type));
 
     socket.init(auth_type);
