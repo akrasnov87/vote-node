@@ -1121,6 +1121,29 @@ exports.cf_bind_appartament = function (session) {
 }
 
 /**
+ * График сгорания
+ * @example
+ * Тип: FUNCTION
+ * Схема: dbo
+ * // примеры выборки
+ * db.cf_burndown().Query({params:{...}}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ */
+exports.cf_burndown = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.call('dbo', 'cf_burndown', query_param.params, callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_burndown()', query_param, filter.security(session), callback);
+        }
+    }
+}
+
+/**
  * Создание квартир
  * @example
  * Тип: FUNCTION
@@ -1530,6 +1553,29 @@ exports.cf_old_date = function (session) {
         },
         Select: function (query_param, callback) {
             provider.select('core', 'cf_old_date()', query_param, filter.security(session), callback);
+        }
+    }
+}
+
+/**
+ * Рейтинг агитаторов
+ * @example
+ * Тип: FUNCTION
+ * Схема: dbo
+ * // примеры выборки
+ * db.cf_rating().Query({params:{...}}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ */
+exports.cf_rating = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.call('dbo', 'cf_rating', query_param.params, callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_rating()', query_param, filter.security(session), callback);
         }
     }
 }
@@ -3345,6 +3391,7 @@ exports.sd_client_errors = function (session) {
  *      f_division:integer (core.sd_divisions.id) - Отделение
  *      c_app_name:text - Имя приложения
  *      b_hidden:boolean - Скрыт
+ *      ba_file:bytea - Файл для обновления
  * // примеры выборки
  * db.sd_digests().Query({...}, function(data) {
  *      if(data.meta.success) {
