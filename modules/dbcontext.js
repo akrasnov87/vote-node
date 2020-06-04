@@ -1144,6 +1144,29 @@ exports.cf_burndown = function (session) {
 }
 
 /**
+ * Очистка маршрута
+ * @example
+ * Тип: FUNCTION
+ * Схема: dbo
+ * // примеры выборки
+ * db.cf_clearroute().Query({params:{...}}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ */
+exports.cf_clearroute = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.call('dbo', 'cf_clearroute', query_param.params, callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_clearroute()', query_param, filter.security(session), callback);
+        }
+    }
+}
+
+/**
  * Создание квартир
  * @example
  * Тип: FUNCTION
@@ -1328,7 +1351,7 @@ exports.cf_imp_registr_pts = function (session) {
 }
 
 /**
- * Импорт пользователей
+ * Импорт пользователя
  * @example
  * Тип: FUNCTION
  * Схема: dbo
@@ -1696,13 +1719,13 @@ exports.cs_answer = function (session) {
  * Первичный ключ: id
  * Схема: dbo
  * Поля:
- *      id:uuid - Идентификатор
+ *      b_disabled:boolean - b_disabled
+ *      c_number:text - Строковый номер
+ *      dx_date:timestamp with time zone - dx_date
  *      f_house:uuid (dbo.cs_house.id) - Дом
- *      c_number:text - Номер
+ *      f_user:integer (core.pd_users.id) - Агитатор
+ *      id:uuid - Идентификатор
  *      n_number:integer - Номер
- *      dx_created:timestamp with time zone - dx_created
- *      f_user:integer (core.pd_users.id) - f_user
- *      sn_delete:boolean - sn_delete
  * // примеры выборки
  * db.cs_appartament().Query({...}, function(data) {
  *      if(data.meta.success) {
@@ -1779,23 +1802,16 @@ exports.cs_appartament = function (session) {
  * Первичный ключ: id
  * Схема: dbo
  * Поля:
- *      id:uuid - Идентификатор
- *      f_street:uuid (dbo.cs_street.id) - Улица
- *      c_house_num:text - Номер дома
+ *      b_disabled:boolean - b_disabled
  *      c_build_num:text - Корпус
- *      c_data:text - Дома/квартиры через запятую
- *      b_mkd:boolean - МКД
- *      c_number:text - Номер дома
- *      dx_created:timestamp with time zone - dx_created
- *      sn_delete:boolean - sn_delete
- *      b_self:boolean - Самострой
- *      n_appartament:integer - Кол-во кв. в доме
- *      n_height_num:integer - Кол-во кв. в доме
- *      n_latitude:numeric - n_latitude
- *      n_longitude:numeric - n_longitude
- *      n_number:integer - n_number
- *      n_porch:integer - Кол-во подъездов в доме
- *      b_private:boolean - b_private
+ *      c_floor:text - Кол-во этажей
+ *      c_house_num:text - Номер дома
+ *      c_porch:text - Кол-во подъездов в доме
+ *      dx_date:timestamp with time zone - dx_date
+ *      f_street:uuid (dbo.cs_street.id) - Улица
+ *      f_subdivision:integer (core.sd_subdivisions.id) - f_subdivision
+ *      id:uuid - Идентификатор
+ *      n_uik:integer - n_uik
  * // примеры выборки
  * db.cs_house().Query({...}, function(data) {
  *      if(data.meta.success) {
@@ -2376,12 +2392,11 @@ exports.cs_setting_types = function (session) {
  * Схема: dbo
  * Поля:
  *      id:uuid - Идентификатор
- *      c_name:text - Наименование
+ *      b_disabled:boolean - b_disabled
+ *      c_name:text - улица
  *      c_type:text - Тип
- *      c_street_name:text - Имя
- *      c_yandex_name:text - Имя в yandex
- *      dx_created:timestamp with time zone - Дата создания
- *      sn_delete:boolean - Признак удаленной записи
+ *      dx_date:timestamp with time zone - dx_date
+ *      f_division:integer (core.sd_divisions.id) - f_division
  * // примеры выборки
  * db.cs_street().Query({...}, function(data) {
  *      if(data.meta.success) {
@@ -2452,108 +2467,18 @@ exports.cs_street = function (session) {
 }
 
 /**
- * Избирательный участок
- * @example
- * Тип: BASE TABLE
- * Первичный ключ: id
- * Схема: dbo
- * Поля:
- *      id:bigint - № округа
- *      c_area:text - Район
- *      n_area:text - № округа
- *      c_name:text - Здание УИК
- *      c_address:text - Адрес
- *      c_phone:text - Телефон
- *      dx_created:timestamp with time zone - Дата создания
- *      sn_delete:boolean - Признак удаленной записи
- *      f_user:integer (core.pd_users.id) - f_user
- *      c_boundary:text - Границы УИК
- *      n_count:integer - Количество избирателей
- * // примеры выборки
- * db.cs_uik().Query({...}, function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
-  * // примеры выборки через функцию
- * db.cf_cs_uik().Select({...}, function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- * // примеры добавления
- * db.cs_uik().Add({...}|[{...}], function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- * // примеры обновления
- * db.cs_uik().Update({id:any ...}|[{id:any ...}], function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- * // примеры создания или обновления
- * db.cs_uik().AddOrUpdate({id:any ...}, function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- * // примеры удаления
- * db.cs_uik().Delete({id:any ...}|[{id:any ...}], function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
-  * // примеры получения количества записей
- * db.cs_uik().Count({...}, function(data) {
- *      if(data.meta.success) {
- *          // results.result.total
- *      }   
- * });
- */
-exports.cs_uik = function (session) {
-    return {
-        Query: function (query_param, callback) {
-            provider.select('dbo', 'cs_uik', query_param, filter.security(session), callback);
-        },
-        Select: function (query_param, callback) {
-            provider.select('dbo', 'cf_mui_cs_uik()', query_param, filter.security(session), callback);
-        },
-        Add: function (data, callback) {
-            provider.insert('dbo', 'cs_uik', data, callback);
-        },
-        AddOrUpdate: function (data, callback) {
-            provider.insertOrUpdate('dbo', 'cs_uik', 'id', data, callback);
-        },
-        Update: function (data, callback) {
-            provider.update('dbo', 'cs_uik', 'id', data, callback);
-        },
-        Delete: function (data, callback) {
-            provider.delete('dbo', 'cs_uik', 'id', data, callback);
-        },
-        Count: function (query_param, callback) {
-            provider.count('dbo', 'cs_uik', query_param, callback);
-        }
-    }
-}
-
-/**
  * Адреса
  * @example
  * Тип: VIEW
  * Схема: dbo
  * Поля:
  *      b_private:boolean - b_private
- *      id:uuid - id
- *      b_self:boolean - b_self
  *      c_build_num:text - c_build_num
- *      c_data:text - c_data
+ *      c_floor:text - c_floor
  *      c_house_num:text - c_house_num
- *      b_mkd:boolean - b_mkd
- *      n_appartament:integer - n_appartament
- *      n_height_num:integer - n_height_num
- *      n_porch:integer - n_porch
+ *      c_porch:text - c_porch
+ *      id:uuid - id
+ *      n_appartament:bigint - n_appartament
  *      street_id:uuid - street_id
  *      street_name:text - street_name
  * // примеры выборки
@@ -2586,15 +2511,15 @@ exports.cv_house = function (session) {
  * Тип: VIEW
  * Схема: dbo
  * Поля:
- *      c_area:text - c_area
- *      c_fio:text - c_fio
- *      c_uik_name:text - c_uik_name
+ *      c_login:text - c_login
+ *      c_number:text - c_number
+ *      c_route_type_name:text - c_route_type_name
  *      f_type:integer - f_type
+ *      id:integer - id
  *      n_all:bigint - n_all
  *      n_count:bigint - n_count
  *      n_today_count:bigint - n_today_count
- *      n_uik:bigint - n_uik
- *      user_id:integer - user_id
+ *      n_uik:integer - n_uik
  * // примеры выборки
  * db.cv_userinroutes().Query({...}, function(data) {
  *      if(data.meta.success) {
@@ -2620,67 +2545,20 @@ exports.cv_userinroutes = function (session) {
 }
 
 /**
- * Сведения о Кураторах, ОзаУИК и волонтерах, закрепленных за УИК
- * @example
- * Тип: VIEW
- * Схема: dbo
- * Поля:
- *      c_fio:text - c_fio
- *      c_tel_uik:text - c_tel_uik
- *      c_fio_main:text - c_fio_main
- *      c_fio_uik:text - c_fio_uik
- *      c_post:text - c_post
- *      c_post_uik:text - c_post_uik
- *      c_tel:text - c_tel
- *      c_tel_main:text - c_tel_main
- *      c_area:text - c_area
- *      c_work:text - c_work
- *      c_work_uik:text - c_work_uik
- *      id_uik:bigint - id_uik
- *      n_area:text - n_area
- *      user_id:integer - user_id
- *      user_id_main:integer - user_id_main
- *      user_id_uik:integer - user_id_uik
- * // примеры выборки
- * db.cv_users().Query({...}, function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- * // примеры получения количества записей
- * db.cv_users().Count({...}, function(data) {
- *      if(data.meta.success) {
- *          // results.result.total
- *      }   
- * });
- */
-exports.cv_users = function (session) {
-    return {
-        Query: function (query_param, callback) {
-            provider.select('dbo', 'cv_users', query_param, filter.security(session), callback);
-        },
-        Count: function (query_param, callback) {
-            provider.count('dbo', 'cv_users', query_param, callback);
-        }
-    }
-}
-
-/**
  * Закрепление волонтеров
  * @example
  * Тип: VIEW
  * Схема: dbo
  * Поля:
- *      c_area:text - c_area
- *      n_mkd_count:bigint - n_mkd_count
- *      house_build:text - house_build
- *      house_number:text - house_number
- *      n_area:text - n_area
  *      c_appartament:text - c_appartament
- *      n_private_count:bigint - n_private_count
- *      n_total:bigint - n_total
- *      street_name:text - street_name
- *      uik_id:bigint - uik_id
+ *      c_build_num:text - c_build_num
+ *      c_division:text - c_division
+ *      c_house_num:text - c_house_num
+ *      c_street:text - c_street
+ *      c_subdivision:text - c_subdivision
+ *      c_type:text - c_type
+ *      n_appartament:bigint - n_appartament
+ *      n_uik:integer - n_uik
  *      user_id:integer - user_id
  * // примеры выборки
  * db.cv_user_bind().Query({...}, function(data) {
@@ -2717,20 +2595,13 @@ exports.cv_user_bind = function (session) {
  *      c_appartament_num:text - Номер квартиры (строковая)
  *      n_appartament_num:integer - Номер квартиры
  *      c_house_num:text - Номер дома (строковая)
- *      n_house_num:integer - Номер дома
- *      jb_tel:jsonb - Номер телефона
- *      jb_email:jsonb - Эл. почта
- *      n_longitude:numeric - Долгота
- *      n_latitude:numeric - Широта
- *      f_user:integer (core.pd_users.id) - Пользователь
  *      f_division:integer (core.sd_divisions.id) - Отделение
- *      f_subdivision:integer (core.sd_divisions.id) - Участок
+ *      f_subdivision:integer (core.sd_subdivisions.id) - Участок
  *      b_disabled:boolean - Отлючено
- *      gx_geodata:USER-DEFINED - Вычисляемое поле
  *      dx_created:timestamp with time zone - Дата создания
  *      sn_delete:boolean - Признак удаленной записи
  *      c_address:text - Адрес
- *      c_fio:text - ФИО потребителя
+ *      n_uik:integer - n_uik
  * // примеры выборки
  * db.ed_registr_pts().Query({...}, function(data) {
  *      if(data.meta.success) {
@@ -2980,7 +2851,7 @@ exports.pd_roles = function (session) {
  *      id:integer - Идентификатор
  *      f_user:integer (core.pd_users.id) - Пользователь
  *      f_division:integer (core.sd_divisions.id) - Отделение
- *      f_subdivision:integer (core.sd_divisions.id) - Участок
+ *      f_subdivision:integer (core.sd_subdivisions.id) - Участок
  *      sn_delete:boolean - Признак удаленной записи
  * // примеры выборки
  * db.pd_userindivisions().Query({...}, function(data) {
@@ -3144,18 +3015,13 @@ exports.pd_userinroles = function (session) {
  *      c_password:text - Пароль
  *      s_salt:text - Salt
  *      s_hash:text - Hash
- *      c_firstname:text - Имя
- *      c_lastname:text - Фамилия
- *      c_patronymic:text - Отчество
  *      c_email:text - Адрес эл. почты
  *      c_tel:text - Телефон
  *      c_imei:text - IMEI
  *      c_description:text - Описание
  *      b_disabled:boolean - Отключен
  *      sn_delete:boolean - Удален
- *      f_uik:bigint (dbo.cs_uik.id) - УИК
- *      c_work:text - Место работы волонтера
- *      c_post:text - Должность
+ *      n_uik:integer - УИК
  * // примеры выборки
  * db.pd_users().Query({...}, function(data) {
  *      if(data.meta.success) {
@@ -3255,20 +3121,17 @@ exports.pf_accesses = function (session) {
  * Схема: core
  * Поля:
  *      c_all_divisions:text - c_all_divisions
- *      c_lastname:text - c_lastname
+ *      c_login:text - c_login
  *      c_claims:text - c_claims
  *      c_description:text - c_description
  *      c_divisions:text - c_divisions
  *      c_email:text - c_email
- *      c_firstname:text - c_firstname
  *      b_disabled:boolean - b_disabled
- *      c_login:text - c_login
- *      c_patronymic:text - c_patronymic
  *      c_subdivisions:text - c_subdivisions
  *      c_tel:text - c_tel
  *      f_parent:integer - f_parent
  *      id:integer - id
- *      n_uik:bigint - n_uik
+ *      n_uik:integer - n_uik
  * // примеры выборки
  * db.pv_users().Query({...}, function(data) {
  *      if(data.meta.success) {
@@ -3544,6 +3407,98 @@ exports.sd_divisions = function (session) {
 }
 
 /**
+ * Таблица для импорта
+ * @example
+ * Тип: BASE TABLE
+ * Первичный ключ: id
+ * Схема: dbo
+ * Поля:
+ *      c_build:text - корп.
+ *      c_type:text - улица (вид)
+ *      c_floor:text - Кол-во этажей в данном доме
+ *      c_house:text - дом №
+ *      c_notice:text - ПРИМЕЧАНИЯ
+ *      c_num:text - ID (номер агитатора - номер участка работы)
+ *      c_porch:text - Кол-во подъездов в данном доме
+ *      c_street:text - улица (название)
+ *      c_area:text - Район
+ *      f_house:uuid - f_house
+ *      id:integer - id
+ *      n_appartament_count:integer - Кол-во кв-р в данном доме
+ *      n_appartament_end:integer - номера квартир агитатора в данном доме (с __ по __)
+ *      n_appartament_start:integer - номера квартир агитатора в данном доме (с __ по __)
+ *      n_district:integer - № округа
+ *      n_uik:integer - № УИК
+ * // примеры выборки
+ * db.sd_import().Query({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+  * // примеры выборки через функцию
+ * db.cf_sd_import().Select({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры добавления
+ * db.sd_import().Add({...}|[{...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры обновления
+ * db.sd_import().Update({id:any ...}|[{id:any ...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры создания или обновления
+ * db.sd_import().AddOrUpdate({id:any ...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры удаления
+ * db.sd_import().Delete({id:any ...}|[{id:any ...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+  * // примеры получения количества записей
+ * db.sd_import().Count({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // results.result.total
+ *      }   
+ * });
+ */
+exports.sd_import = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.select('dbo', 'sd_import', query_param, filter.security(session), callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_mui_sd_import()', query_param, filter.security(session), callback);
+        },
+        Add: function (data, callback) {
+            provider.insert('dbo', 'sd_import', data, callback);
+        },
+        AddOrUpdate: function (data, callback) {
+            provider.insertOrUpdate('dbo', 'sd_import', 'id', data, callback);
+        },
+        Update: function (data, callback) {
+            provider.update('dbo', 'sd_import', 'id', data, callback);
+        },
+        Delete: function (data, callback) {
+            provider.delete('dbo', 'sd_import', 'id', data, callback);
+        },
+        Count: function (query_param, callback) {
+            provider.count('dbo', 'sd_import', query_param, callback);
+        }
+    }
+}
+
+/**
  * Участки
  * @example
  * Тип: BASE TABLE
@@ -3666,6 +3621,29 @@ exports.sf_build_version = function (session) {
         },
         Select: function (query_param, callback) {
             provider.select('core', 'sf_build_version()', query_param, filter.security(session), callback);
+        }
+    }
+}
+
+/**
+ * Преобразование номера агитатора в число
+ * @example
+ * Тип: FUNCTION
+ * Схема: dbo
+ * // примеры выборки
+ * db.sf_convert_number().Query({params:{...}}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ */
+exports.sf_convert_number = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.call('dbo', 'sf_convert_number', query_param.params, callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'sf_convert_number()', query_param, filter.security(session), callback);
         }
     }
 }

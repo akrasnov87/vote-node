@@ -16,6 +16,7 @@ module.exports = function () {
     router.get("/version-file", function (req, res) {
         db.provider.select('core', 'sd_digests', { limit: 1, select: 'c_version, ba_file', sort: [{ property: "id", direction: "DESC" }], filter: [{ property: "b_hidden", operator: "=", value: false }] }, null, function (data) {
             if (data.meta.success) {
+                res.setHeader('Content-Disposition', 'attachment; filename=vote.apk');
                 res.setHeader("Content-Type", 'application/vnd.android.package-archive');
                 res.send(data.result.records[0].ba_file);
             } else {
