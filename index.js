@@ -60,6 +60,10 @@ app.use(vPath, require('./router/synchronization')('basic'));
 app.use(vPath + '/exists', exists());
 app.use(vPath + '/upload', upload());
 
+app.use(vPath + '/download', function (request, response) {
+    response.redirect(vPath + '/upload/version-file');
+});
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     next(createError(404));
