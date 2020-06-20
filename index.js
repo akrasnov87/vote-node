@@ -87,9 +87,9 @@ app.use(function (err, req, res, next) {
 // удаление старых каталогов
 var nTimeLine = 24 * 60 * 60 * 1000;
 var nDay = 1;
-catalogUtil.removeLastDirs(join(__dirname, 'files'), nDay);
+catalogUtil.removeLastDirs(join(__dirname, 'files'), nDay, function () { });
 setInterval(function () {
-    catalogUtil.removeLastDirs(join(__dirname, 'files'), nDay);
+    catalogUtil.removeLastDirs(join(__dirname, 'files'), nDay, function () { });
 }, nTimeLine);
 
 /**
