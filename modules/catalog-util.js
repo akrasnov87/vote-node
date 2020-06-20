@@ -51,6 +51,9 @@ exports.getDirNums = getDirNums;
 exports.removeLastDirs = function (path, days, callback) {
     getDirNums(path, function (err, dirs) {
         if (!err) {
+            if (dirs.length == 0) {
+                return callback(0);
+            }
             var dates = [];
             dirs.forEach(function (dir) {
                 dates.push(convertNumToDate(dir));
