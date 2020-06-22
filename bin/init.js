@@ -16,7 +16,7 @@ module.exports = function (callback) {
         schemaReference: join(__dirname, '../', 'schema.reference')
     }, function (schemas) {
 
-        Date.prototype.toJSON = function () { return moment(this).format('YYYY-MM-DDTHH:mm:ss.SSSZ'); }
+        Date.prototype.toJSON = function () { return moment(this).format('YYYY-MM-DDTHH:mm:ss.SSSZZ'); }
 
         global.schemas = schemas;
         var path = join(__dirname, '../', './modules/dbcontext.js');
