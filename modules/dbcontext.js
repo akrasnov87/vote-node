@@ -1604,6 +1604,29 @@ exports.cf_rating = function (session) {
 }
 
 /**
+ * Список точек в маршрутах пользователя
+ * @example
+ * Тип: FUNCTION
+ * Схема: dbo
+ * // примеры выборки
+ * db.cf_ui_points().Query({params:{...}}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ */
+exports.cf_ui_points = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.call('dbo', 'cf_ui_points', query_param.params, callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_ui_points()', query_param, filter.security(session), callback);
+        }
+    }
+}
+
+/**
  * Процедура очистки устаревших данных
  * @example
  * Тип: FUNCTION
@@ -2511,6 +2534,120 @@ exports.cv_house = function (session) {
  * Тип: VIEW
  * Схема: dbo
  * Поля:
+ *      b_disabled:boolean - b_disabled
+ *      c_description:text - c_description
+ *      c_divisions:text - c_divisions
+ *      c_email:text - c_email
+ *      c_login:text - c_login
+ *      c_subdivisions:text - c_subdivisions
+ *      c_tel:text - c_tel
+ *      id:integer - id
+ *      n_uik:integer - n_uik
+ * // примеры выборки
+ * db.cv_inspector().Query({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры получения количества записей
+ * db.cv_inspector().Count({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // results.result.total
+ *      }   
+ * });
+ */
+exports.cv_inspector = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.select('dbo', 'cv_inspector', query_param, filter.security(session), callback);
+        },
+        Count: function (query_param, callback) {
+            provider.count('dbo', 'cv_inspector', query_param, callback);
+        }
+    }
+}
+
+/**
+ * 
+ * @example
+ * Тип: VIEW
+ * Схема: dbo
+ * Поля:
+ *      c_login:text - c_login
+ *      c_number:text - c_number
+ *      c_status:text - c_status
+ *      c_type:text - c_type
+ *      d_date_end:date - d_date_end
+ *      d_date_start:date - d_date_start
+ *      f_route:uuid - f_route
+ *      f_type:integer - f_type
+ *      f_user:integer - f_user
+ * // примеры выборки
+ * db.cv_routes().Query({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры получения количества записей
+ * db.cv_routes().Count({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // results.result.total
+ *      }   
+ * });
+ */
+exports.cv_routes = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.select('dbo', 'cv_routes', query_param, filter.security(session), callback);
+        },
+        Count: function (query_param, callback) {
+            provider.count('dbo', 'cv_routes', query_param, callback);
+        }
+    }
+}
+
+/**
+ * 
+ * @example
+ * Тип: VIEW
+ * Схема: dbo
+ * Поля:
+ *      c_network_status:text - c_network_status
+ *      d_date:timestamp with time zone - d_date
+ *      d_date_str:text - d_date_str
+ *      f_user:integer - f_user
+ *      n_latitude:numeric - n_latitude
+ *      n_longitude:numeric - n_longitude
+ * // примеры выборки
+ * db.cv_tracking().Query({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры получения количества записей
+ * db.cv_tracking().Count({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // results.result.total
+ *      }   
+ * });
+ */
+exports.cv_tracking = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.select('dbo', 'cv_tracking', query_param, filter.security(session), callback);
+        },
+        Count: function (query_param, callback) {
+            provider.count('dbo', 'cv_tracking', query_param, callback);
+        }
+    }
+}
+
+/**
+ * 
+ * @example
+ * Тип: VIEW
+ * Схема: dbo
+ * Поля:
  *      c_login:text - c_login
  *      c_number:text - c_number
  *      c_route_type_name:text - c_route_type_name
@@ -3022,6 +3159,7 @@ exports.pd_userinroles = function (session) {
  *      b_disabled:boolean - Отключен
  *      sn_delete:boolean - Удален
  *      n_uik:integer - УИК
+ *      dx_created:timestamp with time zone - dx_created
  * // примеры выборки
  * db.pd_users().Query({...}, function(data) {
  *      if(data.meta.success) {
@@ -3255,6 +3393,7 @@ exports.sd_client_errors = function (session) {
  *      c_app_name:text - Имя приложения
  *      b_hidden:boolean - Скрыт
  *      ba_file:bytea - Файл для обновления
+ *      dx_created:timestamp with time zone - dx_created
  * // примеры выборки
  * db.sd_digests().Query({...}, function(data) {
  *      if(data.meta.success) {

@@ -6,6 +6,7 @@ var reader = require('mobnius-schema-reader');
 var conf = require('node-config')(join(__dirname, '../'));
 var args = require("args-parser")(process.argv);
 require('./cleanup');
+var moment = require('moment');
 
 module.exports = function (callback) {
     reader({
@@ -14,6 +15,9 @@ module.exports = function (callback) {
         schemaList: ["'core'", "'dbo'"],
         schemaReference: join(__dirname, '../', 'schema.reference')
     }, function (schemas) {
+
+        Date.prototype.toJSON = function () { return moment(this).format('YYYY-MM-DDTHH:mm:ss.SSSZ'); }
+
         global.schemas = schemas;
         var path = join(__dirname, '../', './modules/dbcontext.js');
 
