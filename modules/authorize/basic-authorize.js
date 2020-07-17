@@ -88,7 +88,8 @@ exports.authorize = function (req, res) {
                 token: new Buffer(UserName + ':' + Password).toString('base64'),
                 user: {
                     userId: user.id,
-                    claims: user.c_claims
+                    claims: user.c_claims,
+                    b_disabled: user.b_disabled
                 }
             });
         }

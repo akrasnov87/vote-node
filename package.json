@@ -1,6 +1,6 @@
 {
     "name": "vote-node",
-    "version": "3.90.621",
+    "version": "3.115.472",
     "birthday": "2020-03-24",
     "description": "Служба для получения данных от PostgreSQL",
     "main": "bin/www",
