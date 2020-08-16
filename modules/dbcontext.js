@@ -369,6 +369,181 @@ exports.ad_tracking = function (session) {
 }
 
 /**
+ * Обратная связь
+ * @example
+ * Тип: BASE TABLE
+ * Первичный ключ: id
+ * Схема: core
+ * Поля:
+ *      c_answer:text - Ответ
+ *      c_imei:text - IMEI, либо номер устройства
+ *      c_question:text - Текст обращения
+ *      d_date_answer:timestamp with time zone - Дата ответ
+ *      d_date_question:timestamp with time zone - Дата обращения
+ *      dx_created:timestamp with time zone - Дата создания в БД
+ *      fn_type:integer - Тип обращения
+ *      fn_user:integer - Пользователь
+ *      id:uuid - Идентификатор
+ *      jb_data:jsonb - Дополнительные данные
+ * // примеры выборки
+ * db.cd_feedbacks().Query({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+  * // примеры выборки через функцию
+ * db.cf_cd_feedbacks().Select({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры добавления
+ * db.cd_feedbacks().Add({...}|[{...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры обновления
+ * db.cd_feedbacks().Update({id:any ...}|[{id:any ...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры создания или обновления
+ * db.cd_feedbacks().AddOrUpdate({id:any ...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры удаления
+ * db.cd_feedbacks().Delete({id:any ...}|[{id:any ...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+  * // примеры получения количества записей
+ * db.cd_feedbacks().Count({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // results.result.total
+ *      }   
+ * });
+ */
+exports.cd_feedbacks = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.select('core', 'cd_feedbacks', query_param, filter.security(session), callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('core', 'cf_mui_cd_feedbacks()', query_param, filter.security(session), callback);
+        },
+        Add: function (data, callback) {
+            provider.insert('core', 'cd_feedbacks', data, callback);
+        },
+        AddOrUpdate: function (data, callback) {
+            provider.insertOrUpdate('core', 'cd_feedbacks', 'id', data, callback);
+        },
+        Update: function (data, callback) {
+            provider.update('core', 'cd_feedbacks', 'id', data, callback);
+        },
+        Delete: function (data, callback) {
+            provider.delete('core', 'cd_feedbacks', 'id', data, callback);
+        },
+        Count: function (query_param, callback) {
+            provider.count('core', 'cd_feedbacks', query_param, callback);
+        }
+    }
+}
+
+/**
+ * Лояльное население
+ * @example
+ * Тип: BASE TABLE
+ * Первичный ключ: id
+ * Схема: dbo
+ * Поля:
+ *      c_last_name:text - Фамилия
+ *      f_appartament:uuid (dbo.cs_appartament.id) - Помещение, Квартира
+ *      c_org:text - Наименование организации
+ *      c_patronymic:text - Отчество
+ *      c_phone:text - Номер телефона
+ *      dx_created:timestamp with time zone - dx_created
+ *      c_first_name:text - Имя
+ *      f_house:uuid (dbo.cs_house.id) - Дом
+ *      f_street:uuid (dbo.cs_street.id) - Улица
+ *      f_type:integer (dbo.cs_people_types.id) - Тип записи
+ *      f_user:integer (core.pd_users.id) - Пользователь
+ *      id:uuid - id
+ *      n_birth_year:integer - Год рождения
+ * // примеры выборки
+ * db.cd_people().Query({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+  * // примеры выборки через функцию
+ * db.cf_cd_people().Select({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры добавления
+ * db.cd_people().Add({...}|[{...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры обновления
+ * db.cd_people().Update({id:any ...}|[{id:any ...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры создания или обновления
+ * db.cd_people().AddOrUpdate({id:any ...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры удаления
+ * db.cd_people().Delete({id:any ...}|[{id:any ...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+  * // примеры получения количества записей
+ * db.cd_people().Count({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // results.result.total
+ *      }   
+ * });
+ */
+exports.cd_people = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.select('dbo', 'cd_people', query_param, filter.security(session), callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_mui_cd_people()', query_param, filter.security(session), callback);
+        },
+        Add: function (data, callback) {
+            provider.insert('dbo', 'cd_people', data, callback);
+        },
+        AddOrUpdate: function (data, callback) {
+            provider.insertOrUpdate('dbo', 'cd_people', 'id', data, callback);
+        },
+        Update: function (data, callback) {
+            provider.update('dbo', 'cd_people', 'id', data, callback);
+        },
+        Delete: function (data, callback) {
+            provider.delete('dbo', 'cd_people', 'id', data, callback);
+        },
+        Count: function (query_param, callback) {
+            provider.count('dbo', 'cd_people', query_param, callback);
+        }
+    }
+}
+
+/**
  * Точки
  * @example
  * Тип: BASE TABLE
@@ -376,13 +551,14 @@ exports.ad_tracking = function (session) {
  * Схема: core
  * Поля:
  *      id:uuid - Идентификатор
- *      f_registr_pts:uuid (dbo.ed_registr_pts.id) - Учетный показатель
  *      f_route:uuid (core.cd_routes.id) - Маршрут
  *      c_notice:text - Примечание
  *      c_info:text - Информация
  *      jb_data:jsonb - JSON данные
  *      dx_created:timestamp with time zone - Дата создания в БД
  *      n_order:integer - Сортировка
+ *      f_appartament:uuid (dbo.cs_appartament.id) - Квартира
+ *      n_priority:integer - Приоритет задания
  * // примеры выборки
  * db.cd_points().Query({...}, function(data) {
  *      if(data.meta.success) {
@@ -473,6 +649,7 @@ exports.cd_points = function (session) {
  *      jb_data:jsonb - JSON данные
  *      dx_created:timestamp with time zone - Дата создания в БД
  *      n_order:integer - n_order
+ *      n_rating:integer - Оценка
  * // примеры выборки
  * db.cd_results().Query({...}, function(data) {
  *      if(data.meta.success) {
@@ -561,6 +738,7 @@ exports.cd_results = function (session) {
  *      jb_data:jsonb - JSON данные
  *      dx_created:timestamp with time zone - Дата создания в БД
  *      n_order:integer - Сортировка
+ *      f_house:uuid (dbo.cs_house.id) - Ссылка на дом
  * // примеры выборки
  * db.cd_routes().Query({...}, function(data) {
  *      if(data.meta.success) {
@@ -879,6 +1057,345 @@ exports.cd_sys_log = function (session) {
 }
 
 /**
+ * Форма базы данных городских бюджетников, подавших заявку на участие в предварительном голосовании Единой России
+ * @example
+ * Тип: BASE TABLE
+ * Первичный ключ: id
+ * Схема: dbo
+ * Поля:
+ *      c_last_name:text - Фамилия
+ *      dx_created:timestamp with time zone - dx_created
+ *      c_org:text - Название организации
+ *      c_patronymic:text - Отчество
+ *      c_phone:text - Телефон
+ *      c_first_name:text - Имя
+ *      f_appartament:uuid (dbo.cs_appartament.id) - Помещение, Квартира
+ *      f_house:uuid (dbo.cs_house.id) - Дом
+ *      f_street:uuid (dbo.cs_street.id) - Улица
+ *      f_user:integer (core.pd_users.id) - Пользователь
+ *      id:uuid - id
+ * // примеры выборки
+ * db.cd_tmp_budget().Query({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+  * // примеры выборки через функцию
+ * db.cf_cd_tmp_budget().Select({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры добавления
+ * db.cd_tmp_budget().Add({...}|[{...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры обновления
+ * db.cd_tmp_budget().Update({id:any ...}|[{id:any ...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры создания или обновления
+ * db.cd_tmp_budget().AddOrUpdate({id:any ...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры удаления
+ * db.cd_tmp_budget().Delete({id:any ...}|[{id:any ...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+  * // примеры получения количества записей
+ * db.cd_tmp_budget().Count({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // results.result.total
+ *      }   
+ * });
+ */
+exports.cd_tmp_budget = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.select('dbo', 'cd_tmp_budget', query_param, filter.security(session), callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_mui_cd_tmp_budget()', query_param, filter.security(session), callback);
+        },
+        Add: function (data, callback) {
+            provider.insert('dbo', 'cd_tmp_budget', data, callback);
+        },
+        AddOrUpdate: function (data, callback) {
+            provider.insertOrUpdate('dbo', 'cd_tmp_budget', 'id', data, callback);
+        },
+        Update: function (data, callback) {
+            provider.update('dbo', 'cd_tmp_budget', 'id', data, callback);
+        },
+        Delete: function (data, callback) {
+            provider.delete('dbo', 'cd_tmp_budget', 'id', data, callback);
+        },
+        Count: function (query_param, callback) {
+            provider.count('dbo', 'cd_tmp_budget', query_param, callback);
+        }
+    }
+}
+
+/**
+ * Продовольственный набор
+ * @example
+ * Тип: BASE TABLE
+ * Первичный ключ: id
+ * Схема: dbo
+ * Поля:
+ *      c_last_name:text - Фамилия
+ *      f_appartament:uuid - Помещение, Квартира
+ *      c_patronymic:text - Отчество
+ *      c_phone:text - c_phone
+ *      dx_created:timestamp with time zone - dx_created
+ *      c_first_name:text - Имя
+ *      f_house:uuid - Дом
+ *      f_street:uuid - Улица
+ *      f_type:integer - f_type
+ *      f_user:integer - Пользователь
+ *      id:uuid - id
+ * // примеры выборки
+ * db.cd_tmp_food_kit().Query({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+  * // примеры выборки через функцию
+ * db.cf_cd_tmp_food_kit().Select({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры добавления
+ * db.cd_tmp_food_kit().Add({...}|[{...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры обновления
+ * db.cd_tmp_food_kit().Update({id:any ...}|[{id:any ...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры создания или обновления
+ * db.cd_tmp_food_kit().AddOrUpdate({id:any ...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры удаления
+ * db.cd_tmp_food_kit().Delete({id:any ...}|[{id:any ...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+  * // примеры получения количества записей
+ * db.cd_tmp_food_kit().Count({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // results.result.total
+ *      }   
+ * });
+ */
+exports.cd_tmp_food_kit = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.select('dbo', 'cd_tmp_food_kit', query_param, filter.security(session), callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_mui_cd_tmp_food_kit()', query_param, filter.security(session), callback);
+        },
+        Add: function (data, callback) {
+            provider.insert('dbo', 'cd_tmp_food_kit', data, callback);
+        },
+        AddOrUpdate: function (data, callback) {
+            provider.insertOrUpdate('dbo', 'cd_tmp_food_kit', 'id', data, callback);
+        },
+        Update: function (data, callback) {
+            provider.update('dbo', 'cd_tmp_food_kit', 'id', data, callback);
+        },
+        Delete: function (data, callback) {
+            provider.delete('dbo', 'cd_tmp_food_kit', 'id', data, callback);
+        },
+        Count: function (query_param, callback) {
+            provider.count('dbo', 'cd_tmp_food_kit', query_param, callback);
+        }
+    }
+}
+
+/**
+ * таблица для хранения информации предоставленной заказчиком
+ * @example
+ * Тип: BASE TABLE
+ * Первичный ключ: id
+ * Схема: dbo
+ * Поля:
+ *      c_first_name:text - Имя
+ *      c_last_name:text - Фамилия
+ *      c_patronymic:text - Отчество
+ *      dx_created:timestamp with time zone - dx_created
+ *      f_appartament:uuid (dbo.cs_appartament.id) - Помещение, Квартира
+ *      f_house:uuid (dbo.cs_house.id) - Дом
+ *      f_street:uuid (dbo.cs_street.id) - Улица
+ *      f_user:integer (core.pd_users.id) - Пользователь
+ *      id:uuid - id
+ *      n_birth_year:integer - Год рождения
+ * // примеры выборки
+ * db.cd_tmp_vote_man().Query({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+  * // примеры выборки через функцию
+ * db.cf_cd_tmp_vote_man().Select({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры добавления
+ * db.cd_tmp_vote_man().Add({...}|[{...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры обновления
+ * db.cd_tmp_vote_man().Update({id:any ...}|[{id:any ...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры создания или обновления
+ * db.cd_tmp_vote_man().AddOrUpdate({id:any ...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры удаления
+ * db.cd_tmp_vote_man().Delete({id:any ...}|[{id:any ...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+  * // примеры получения количества записей
+ * db.cd_tmp_vote_man().Count({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // results.result.total
+ *      }   
+ * });
+ */
+exports.cd_tmp_vote_man = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.select('dbo', 'cd_tmp_vote_man', query_param, filter.security(session), callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_mui_cd_tmp_vote_man()', query_param, filter.security(session), callback);
+        },
+        Add: function (data, callback) {
+            provider.insert('dbo', 'cd_tmp_vote_man', data, callback);
+        },
+        AddOrUpdate: function (data, callback) {
+            provider.insertOrUpdate('dbo', 'cd_tmp_vote_man', 'id', data, callback);
+        },
+        Update: function (data, callback) {
+            provider.update('dbo', 'cd_tmp_vote_man', 'id', data, callback);
+        },
+        Delete: function (data, callback) {
+            provider.delete('dbo', 'cd_tmp_vote_man', 'id', data, callback);
+        },
+        Count: function (query_param, callback) {
+            provider.count('dbo', 'cd_tmp_vote_man', query_param, callback);
+        }
+    }
+}
+
+/**
+ * УИК
+ * @example
+ * Тип: BASE TABLE
+ * Первичный ключ: id
+ * Схема: dbo
+ * Поля:
+ *      c_email:text - Email
+ *      c_fio:text - ФИО
+ *      id:integer - Идентификатор
+ * // примеры выборки
+ * db.cd_uik().Query({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+  * // примеры выборки через функцию
+ * db.cf_cd_uik().Select({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры добавления
+ * db.cd_uik().Add({...}|[{...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры обновления
+ * db.cd_uik().Update({id:any ...}|[{id:any ...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры создания или обновления
+ * db.cd_uik().AddOrUpdate({id:any ...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры удаления
+ * db.cd_uik().Delete({id:any ...}|[{id:any ...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+  * // примеры получения количества записей
+ * db.cd_uik().Count({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // results.result.total
+ *      }   
+ * });
+ */
+exports.cd_uik = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.select('dbo', 'cd_uik', query_param, filter.security(session), callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_mui_cd_uik()', query_param, filter.security(session), callback);
+        },
+        Add: function (data, callback) {
+            provider.insert('dbo', 'cd_uik', data, callback);
+        },
+        AddOrUpdate: function (data, callback) {
+            provider.insertOrUpdate('dbo', 'cd_uik', 'id', data, callback);
+        },
+        Update: function (data, callback) {
+            provider.update('dbo', 'cd_uik', 'id', data, callback);
+        },
+        Delete: function (data, callback) {
+            provider.delete('dbo', 'cd_uik', 'id', data, callback);
+        },
+        Count: function (query_param, callback) {
+            provider.count('dbo', 'cd_uik', query_param, callback);
+        }
+    }
+}
+
+/**
  * Исполнители задания
  * @example
  * Тип: BASE TABLE
@@ -1144,6 +1661,29 @@ exports.cf_burndown = function (session) {
 }
 
 /**
+ * Список домов которые привязаны к кандидату
+ * @example
+ * Тип: FUNCTION
+ * Схема: dbo
+ * // примеры выборки
+ * db.cf_candidate_bind().Query({params:{...}}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ */
+exports.cf_candidate_bind = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.call('dbo', 'cf_candidate_bind', query_param.params, callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_candidate_bind()', query_param, filter.security(session), callback);
+        }
+    }
+}
+
+/**
  * Очистка маршрута
  * @example
  * Тип: FUNCTION
@@ -1190,6 +1730,52 @@ exports.cf_create_appartament = function (session) {
 }
 
 /**
+ * Создание пользователя для работы с food_kit
+ * @example
+ * Тип: FUNCTION
+ * Схема: dbo
+ * // примеры выборки
+ * db.cf_create_food_kit_user().Query({params:{...}}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ */
+exports.cf_create_food_kit_user = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.call('dbo', 'cf_create_food_kit_user', query_param.params, callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_create_food_kit_user()', query_param, filter.security(session), callback);
+        }
+    }
+}
+
+/**
+ * Создание пользователя для работы с cd_manual_edit_info
+ * @example
+ * Тип: FUNCTION
+ * Схема: dbo
+ * // примеры выборки
+ * db.cf_create_manual_user().Query({params:{...}}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ */
+exports.cf_create_manual_user = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.call('dbo', 'cf_create_manual_user', query_param.params, callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_create_manual_user()', query_param, filter.security(session), callback);
+        }
+    }
+}
+
+/**
  * Создание маршрута
  * @example
  * Тип: FUNCTION
@@ -1208,6 +1794,29 @@ exports.cf_create_route = function (session) {
         },
         Select: function (query_param, callback) {
             provider.select('dbo', 'cf_create_route()', query_param, filter.security(session), callback);
+        }
+    }
+}
+
+/**
+ * Создание пользователя с определенными ролями
+ * @example
+ * Тип: FUNCTION
+ * Схема: dbo
+ * // примеры выборки
+ * db.cf_create_user().Query({params:{...}}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ */
+exports.cf_create_user = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.call('dbo', 'cf_create_user', query_param.params, callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_create_user()', query_param, filter.security(session), callback);
         }
     }
 }
@@ -1259,6 +1868,75 @@ exports.cf_deluser = function (session) {
 }
 
 /**
+ * Список домов которые привязан агитатор
+ * @example
+ * Тип: FUNCTION
+ * Схема: dbo
+ * // примеры выборки
+ * db.cf_house_bind().Query({params:{...}}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ */
+exports.cf_house_bind = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.call('dbo', 'cf_house_bind', query_param.params, callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_house_bind()', query_param, filter.security(session), callback);
+        }
+    }
+}
+
+/**
+ * Список домов которые привязан агитатор
+ * @example
+ * Тип: FUNCTION
+ * Схема: dbo
+ * // примеры выборки
+ * db.cf_house_bind_by_subdivision().Query({params:{...}}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ */
+exports.cf_house_bind_by_subdivision = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.call('dbo', 'cf_house_bind_by_subdivision', query_param.params, callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_house_bind_by_subdivision()', query_param, filter.security(session), callback);
+        }
+    }
+}
+
+/**
+ * Импорт данных для пользователя-кандидат
+ * @example
+ * Тип: FUNCTION
+ * Схема: dbo
+ * // примеры выборки
+ * db.cf_imp_by_candidate_user().Query({params:{...}}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ */
+exports.cf_imp_by_candidate_user = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.call('dbo', 'cf_imp_by_candidate_user', query_param.params, callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_imp_by_candidate_user()', query_param, filter.security(session), callback);
+        }
+    }
+}
+
+/**
  * Импорт данных для пользователя
  * @example
  * Тип: FUNCTION
@@ -1277,6 +1955,52 @@ exports.cf_imp_by_user = function (session) {
         },
         Select: function (query_param, callback) {
             provider.select('dbo', 'cf_imp_by_user()', query_param, filter.security(session), callback);
+        }
+    }
+}
+
+/**
+ * Генерация маршрутов для пользователей-кандидат
+ * @example
+ * Тип: FUNCTION
+ * Схема: dbo
+ * // примеры выборки
+ * db.cf_imp_candidate_generate_routes().Query({params:{...}}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ */
+exports.cf_imp_candidate_generate_routes = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.call('dbo', 'cf_imp_candidate_generate_routes', query_param.params, callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_imp_candidate_generate_routes()', query_param, filter.security(session), callback);
+        }
+    }
+}
+
+/**
+ * Импорт точек маршрута для кандидата
+ * @example
+ * Тип: FUNCTION
+ * Схема: dbo
+ * // примеры выборки
+ * db.cf_imp_candidate_points().Query({params:{...}}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ */
+exports.cf_imp_candidate_points = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.call('dbo', 'cf_imp_candidate_points', query_param.params, callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_imp_candidate_points()', query_param, filter.security(session), callback);
         }
     }
 }
@@ -1305,6 +2029,29 @@ exports.cf_imp_generate_routes = function (session) {
 }
 
 /**
+ * Генерация маршрутов для округов
+ * @example
+ * Тип: FUNCTION
+ * Схема: dbo
+ * // примеры выборки
+ * db.cf_imp_generate_subdivision_routes().Query({params:{...}}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ */
+exports.cf_imp_generate_subdivision_routes = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.call('dbo', 'cf_imp_generate_subdivision_routes', query_param.params, callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_imp_generate_subdivision_routes()', query_param, filter.security(session), callback);
+        }
+    }
+}
+
+/**
  * Импорт точек маршрута
  * @example
  * Тип: FUNCTION
@@ -1328,29 +2075,6 @@ exports.cf_imp_points = function (session) {
 }
 
 /**
- * Обновление точек учета по всем пользователям
- * @example
- * Тип: FUNCTION
- * Схема: dbo
- * // примеры выборки
- * db.cf_imp_registr_pts().Query({params:{...}}, function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- */
-exports.cf_imp_registr_pts = function (session) {
-    return {
-        Query: function (query_param, callback) {
-            provider.call('dbo', 'cf_imp_registr_pts', query_param.params, callback);
-        },
-        Select: function (query_param, callback) {
-            provider.select('dbo', 'cf_imp_registr_pts()', query_param, filter.security(session), callback);
-        }
-    }
-}
-
-/**
  * Импорт пользователя
  * @example
  * Тип: FUNCTION
@@ -1369,6 +2093,29 @@ exports.cf_imp_user = function (session) {
         },
         Select: function (query_param, callback) {
             provider.select('dbo', 'cf_imp_user()', query_param, filter.security(session), callback);
+        }
+    }
+}
+
+/**
+ * 
+ * @example
+ * Тип: FUNCTION
+ * Схема: core
+ * // примеры выборки
+ * db.cf_mui_cd_feedbacks().Query({params:{...}}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ */
+exports.cf_mui_cd_feedbacks = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.call('core', 'cf_mui_cd_feedbacks', query_param.params, callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('core', 'cf_mui_cd_feedbacks()', query_param, filter.security(session), callback);
         }
     }
 }
@@ -1517,19 +2264,42 @@ exports.cf_mui_cd_user_points = function (session) {
  * Тип: FUNCTION
  * Схема: dbo
  * // примеры выборки
- * db.cf_mui_ed_registr_pts().Query({params:{...}}, function(data) {
+ * db.cf_mui_cs_answer().Query({params:{...}}, function(data) {
  *      if(data.meta.success) {
  *          // data.result.records
  *      }   
  * });
  */
-exports.cf_mui_ed_registr_pts = function (session) {
+exports.cf_mui_cs_answer = function (session) {
     return {
         Query: function (query_param, callback) {
-            provider.call('dbo', 'cf_mui_ed_registr_pts', query_param.params, callback);
+            provider.call('dbo', 'cf_mui_cs_answer', query_param.params, callback);
         },
         Select: function (query_param, callback) {
-            provider.select('dbo', 'cf_mui_ed_registr_pts()', query_param, filter.security(session), callback);
+            provider.select('dbo', 'cf_mui_cs_answer()', query_param, filter.security(session), callback);
+        }
+    }
+}
+
+/**
+ * 
+ * @example
+ * Тип: FUNCTION
+ * Схема: dbo
+ * // примеры выборки
+ * db.cf_mui_cs_question().Query({params:{...}}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ */
+exports.cf_mui_cs_question = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.call('dbo', 'cf_mui_cs_question', query_param.params, callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_mui_cs_question()', query_param, filter.security(session), callback);
         }
     }
 }
@@ -1604,6 +2374,98 @@ exports.cf_rating = function (session) {
 }
 
 /**
+ * Рейтинг кандидатов
+ * @example
+ * Тип: FUNCTION
+ * Схема: dbo
+ * // примеры выборки
+ * db.cf_rating_candidate().Query({params:{...}}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ */
+exports.cf_rating_candidate = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.call('dbo', 'cf_rating_candidate', query_param.params, callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_rating_candidate()', query_param, filter.security(session), callback);
+        }
+    }
+}
+
+/**
+ * 
+ * @example
+ * Тип: FUNCTION
+ * Схема: dbo
+ * // примеры выборки
+ * db.cf_tmp_del_double_house().Query({params:{...}}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ */
+exports.cf_tmp_del_double_house = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.call('dbo', 'cf_tmp_del_double_house', query_param.params, callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_tmp_del_double_house()', query_param, filter.security(session), callback);
+        }
+    }
+}
+
+/**
+ * 
+ * @example
+ * Тип: FUNCTION
+ * Схема: dbo
+ * // примеры выборки
+ * db.cf_tmp_del_double_street().Query({params:{...}}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ */
+exports.cf_tmp_del_double_street = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.call('dbo', 'cf_tmp_del_double_street', query_param.params, callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_tmp_del_double_street()', query_param, filter.security(session), callback);
+        }
+    }
+}
+
+/**
+ * Список домов которые обошел агитатор
+ * @example
+ * Тип: FUNCTION
+ * Схема: dbo
+ * // примеры выборки
+ * db.cf_tracking_house().Query({params:{...}}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ */
+exports.cf_tracking_house = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.call('dbo', 'cf_tracking_house', query_param.params, callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_tracking_house()', query_param, filter.security(session), callback);
+        }
+    }
+}
+
+/**
  * Список точек в маршрутах пользователя
  * @example
  * Тип: FUNCTION
@@ -1622,6 +2484,29 @@ exports.cf_ui_points = function (session) {
         },
         Select: function (query_param, callback) {
             provider.select('dbo', 'cf_ui_points()', query_param, filter.security(session), callback);
+        }
+    }
+}
+
+/**
+ * Обновление ролей у пользователя
+ * @example
+ * Тип: FUNCTION
+ * Схема: dbo
+ * // примеры выборки
+ * db.cf_update_user_roles().Query({params:{...}}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ */
+exports.cf_update_user_roles = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.call('dbo', 'cf_update_user_roles', query_param.params, callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_update_user_roles()', query_param, filter.security(session), callback);
         }
     }
 }
@@ -1666,6 +2551,7 @@ exports.cp_remove_outdated = function (session) {
  *      dx_created:timestamp with time zone - Дата создания
  *      sn_delete:boolean - Признак удаленной записи
  *      c_color:text - Цвет
+ *      f_role:integer (core.pd_roles.id) - Конкретно для указанной роли
  * // примеры выборки
  * db.cs_answer().Query({...}, function(data) {
  *      if(data.meta.success) {
@@ -1746,9 +2632,11 @@ exports.cs_answer = function (session) {
  *      c_number:text - Строковый номер
  *      dx_date:timestamp with time zone - dx_date
  *      f_house:uuid (dbo.cs_house.id) - Дом
+ *      f_main_user:integer (core.pd_users.id) - Ответственный
  *      f_user:integer (core.pd_users.id) - Агитатор
  *      id:uuid - Идентификатор
  *      n_number:integer - Номер
+ *      n_signature_2018:integer - Подписи в 2018
  * // примеры выборки
  * db.cs_appartament().Query({...}, function(data) {
  *      if(data.meta.success) {
@@ -1819,6 +2707,90 @@ exports.cs_appartament = function (session) {
 }
 
 /**
+ * Тип обращения
+ * @example
+ * Тип: BASE TABLE
+ * Первичный ключ: id
+ * Схема: core
+ * Поля:
+ *      b_default:boolean - По умолчанию
+ *      b_disabled:boolean - Отключено
+ *      c_const:text - Константа
+ *      c_name:text - Наименование
+ *      c_short_name:text - Краткое наименование
+ *      id:integer - Идентификатор
+ *      n_code:integer - Код
+ *      n_order:integer - Сортировка
+ * // примеры выборки
+ * db.cs_feedback_types().Query({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+  * // примеры выборки через функцию
+ * db.cf_cs_feedback_types().Select({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры добавления
+ * db.cs_feedback_types().Add({...}|[{...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры обновления
+ * db.cs_feedback_types().Update({id:any ...}|[{id:any ...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры создания или обновления
+ * db.cs_feedback_types().AddOrUpdate({id:any ...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры удаления
+ * db.cs_feedback_types().Delete({id:any ...}|[{id:any ...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+  * // примеры получения количества записей
+ * db.cs_feedback_types().Count({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // results.result.total
+ *      }   
+ * });
+ */
+exports.cs_feedback_types = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.select('core', 'cs_feedback_types', query_param, filter.security(session), callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('core', 'cf_mui_cs_feedback_types()', query_param, filter.security(session), callback);
+        },
+        Add: function (data, callback) {
+            provider.insert('core', 'cs_feedback_types', data, callback);
+        },
+        AddOrUpdate: function (data, callback) {
+            provider.insertOrUpdate('core', 'cs_feedback_types', 'id', data, callback);
+        },
+        Update: function (data, callback) {
+            provider.update('core', 'cs_feedback_types', 'id', data, callback);
+        },
+        Delete: function (data, callback) {
+            provider.delete('core', 'cs_feedback_types', 'id', data, callback);
+        },
+        Count: function (query_param, callback) {
+            provider.count('core', 'cs_feedback_types', query_param, callback);
+        }
+    }
+}
+
+/**
  * Улицы
  * @example
  * Тип: BASE TABLE
@@ -1826,15 +2798,26 @@ exports.cs_appartament = function (session) {
  * Схема: dbo
  * Поля:
  *      b_disabled:boolean - b_disabled
+ *      dx_date:timestamp with time zone - dx_date
+ *      b_yandex:boolean - b_yandex
+ *      b_yandex_fail:boolean - b_yandex_fail
  *      c_build_num:text - Корпус
  *      c_floor:text - Кол-во этажей
  *      c_house_num:text - Номер дома
  *      c_porch:text - Кол-во подъездов в доме
- *      dx_date:timestamp with time zone - dx_date
+ *      c_yandex_description:text - c_yandex_description
+ *      c_yandex_name:text - c_yandex_name
+ *      b_correct_uik:boolean - Проводилась проверка на корректность УИК
+ *      f_candidate_users:jsonb - Кандидаты
  *      f_street:uuid (dbo.cs_street.id) - Улица
  *      f_subdivision:integer (core.sd_subdivisions.id) - f_subdivision
+ *      f_user:integer (core.pd_users.id) - f_user
  *      id:uuid - Идентификатор
+ *      jb_yandex_res:jsonb - jb_yandex_res
+ *      n_latitude:numeric - широта
+ *      n_longitude:numeric - долгота
  *      n_uik:integer - n_uik
+ *      n_uik_correct:integer - Скорректированный УИК
  * // примеры выборки
  * db.cs_house().Query({...}, function(data) {
  *      if(data.meta.success) {
@@ -1900,6 +2883,90 @@ exports.cs_house = function (session) {
         },
         Count: function (query_param, callback) {
             provider.count('dbo', 'cs_house', query_param, callback);
+        }
+    }
+}
+
+/**
+ * Тип маршрута
+ * @example
+ * Тип: BASE TABLE
+ * Первичный ключ: id
+ * Схема: dbo
+ * Поля:
+ *      id:integer - Идентификатор
+ *      n_code:integer - Код
+ *      c_name:text - Наименование
+ *      c_short_name:text - Краткое наименование
+ *      c_const:text - Константа
+ *      n_order:integer - Сортировка
+ *      b_default:boolean - По умолчанию
+ *      b_disabled:boolean - Отключено
+ * // примеры выборки
+ * db.cs_people_types().Query({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+  * // примеры выборки через функцию
+ * db.cf_cs_people_types().Select({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры добавления
+ * db.cs_people_types().Add({...}|[{...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры обновления
+ * db.cs_people_types().Update({id:any ...}|[{id:any ...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры создания или обновления
+ * db.cs_people_types().AddOrUpdate({id:any ...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры удаления
+ * db.cs_people_types().Delete({id:any ...}|[{id:any ...}], function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+  * // примеры получения количества записей
+ * db.cs_people_types().Count({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // results.result.total
+ *      }   
+ * });
+ */
+exports.cs_people_types = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.select('dbo', 'cs_people_types', query_param, filter.security(session), callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'cf_mui_cs_people_types()', query_param, filter.security(session), callback);
+        },
+        Add: function (data, callback) {
+            provider.insert('dbo', 'cs_people_types', data, callback);
+        },
+        AddOrUpdate: function (data, callback) {
+            provider.insertOrUpdate('dbo', 'cs_people_types', 'id', data, callback);
+        },
+        Update: function (data, callback) {
+            provider.update('dbo', 'cs_people_types', 'id', data, callback);
+        },
+        Delete: function (data, callback) {
+            provider.delete('dbo', 'cs_people_types', 'id', data, callback);
+        },
+        Count: function (query_param, callback) {
+            provider.count('dbo', 'cs_people_types', query_param, callback);
         }
     }
 }
@@ -2003,6 +3070,8 @@ exports.cs_point_types = function (session) {
  *      b_disabled:boolean - Отключить
  *      dx_created:timestamp with time zone - Дата создания
  *      sn_delete:boolean - Признак удаленной записи
+ *      f_role:integer (core.pd_roles.id) - Конкретно для указанной роли
+ *      n_priority:integer - n_priority
  * // примеры выборки
  * db.cs_question().Query({...}, function(data) {
  *      if(data.meta.success) {
@@ -2415,11 +3484,20 @@ exports.cs_setting_types = function (session) {
  * Схема: dbo
  * Поля:
  *      id:uuid - Идентификатор
- *      b_disabled:boolean - b_disabled
+ *      n_longitude:numeric - n_longitude
+ *      b_yandex_fail:boolean - b_yandex_fail
  *      c_name:text - улица
+ *      c_short_type:text - c_short_type
  *      c_type:text - Тип
+ *      c_yandex_description:text - c_yandex_description
+ *      c_yandex_name:text - c_yandex_name
  *      dx_date:timestamp with time zone - dx_date
  *      f_division:integer (core.sd_divisions.id) - f_division
+ *      f_user:integer (core.pd_users.id) - f_user
+ *      b_disabled:boolean - b_disabled
+ *      jb_yandex_res:jsonb - jb_yandex_res
+ *      n_latitude:numeric - n_latitude
+ *      b_yandex:boolean - b_yandex
  * // примеры выборки
  * db.cs_street().Query({...}, function(data) {
  *      if(data.meta.success) {
@@ -2496,12 +3574,18 @@ exports.cs_street = function (session) {
  * Схема: dbo
  * Поля:
  *      b_private:boolean - b_private
+ *      c_subdivision:text - c_subdivision
  *      c_build_num:text - c_build_num
  *      c_floor:text - c_floor
  *      c_house_num:text - c_house_num
  *      c_porch:text - c_porch
+ *      c_street_type:text - c_street_type
+ *      b_fail:boolean - b_fail
+ *      f_division:integer - f_division
+ *      f_subdivision:integer - f_subdivision
  *      id:uuid - id
  *      n_appartament:bigint - n_appartament
+ *      n_uik:integer - n_uik
  *      street_id:uuid - street_id
  *      street_name:text - street_name
  * // примеры выборки
@@ -2524,6 +3608,48 @@ exports.cv_house = function (session) {
         },
         Count: function (query_param, callback) {
             provider.count('dbo', 'cv_house', query_param, callback);
+        }
+    }
+}
+
+/**
+ * Список домов к которым привязаны пользователи
+ * @example
+ * Тип: VIEW
+ * Схема: dbo
+ * Поля:
+ *      c_house_num:text - c_house_num
+ *      f_users:json - f_users
+ *      c_street_name:text - c_street_name
+ *      c_street_type:text - c_street_type
+ *      f_street:uuid - f_street
+ *      f_subdivision:integer - f_subdivision
+ *      c_build_num:text - c_build_num
+ *      id:uuid - id
+ *      n_appartament_count:bigint - n_appartament_count
+ *      n_appartament_max:integer - n_appartament_max
+ *      n_appartament_min:integer - n_appartament_min
+ *      n_uik:integer - n_uik
+ * // примеры выборки
+ * db.cv_house_bind().Query({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры получения количества записей
+ * db.cv_house_bind().Count({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // results.result.total
+ *      }   
+ * });
+ */
+exports.cv_house_bind = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.select('dbo', 'cv_house_bind', query_param, filter.security(session), callback);
+        },
+        Count: function (query_param, callback) {
+            provider.count('dbo', 'cv_house_bind', query_param, callback);
         }
     }
 }
@@ -2563,6 +3689,89 @@ exports.cv_inspector = function (session) {
         },
         Count: function (query_param, callback) {
             provider.count('dbo', 'cv_inspector', query_param, callback);
+        }
+    }
+}
+
+/**
+ * Список пользователей, которым разрешено заполнение таблицы cd_vote_man
+ * @example
+ * Тип: VIEW
+ * Схема: dbo
+ * Поля:
+ *      b_disabled:boolean - b_disabled
+ *      c_login:text - c_login
+ *      c_password:text - c_password
+ *      dx_created:timestamp with time zone - dx_created
+ *      id:integer - id
+ * // примеры выборки
+ * db.cv_manual_edit_users().Query({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры получения количества записей
+ * db.cv_manual_edit_users().Count({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // results.result.total
+ *      }   
+ * });
+ */
+exports.cv_manual_edit_users = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.select('dbo', 'cv_manual_edit_users', query_param, filter.security(session), callback);
+        },
+        Count: function (query_param, callback) {
+            provider.count('dbo', 'cv_manual_edit_users', query_param, callback);
+        }
+    }
+}
+
+/**
+ * 
+ * @example
+ * Тип: VIEW
+ * Схема: dbo
+ * Поля:
+ *      c_area:text - c_area
+ *      c_phone:text - c_phone
+ *      c_first_name:text - c_first_name
+ *      c_house_build:text - c_house_build
+ *      c_house_num:text - c_house_num
+ *      c_last_name:text - c_last_name
+ *      c_org:text - c_org
+ *      c_patronymic:text - c_patronymic
+ *      c_people_type:text - c_people_type
+ *      c_appartament_num:text - c_appartament_num
+ *      c_street_name:text - c_street_name
+ *      c_street_type:text - c_street_type
+ *      c_subdivision:text - c_subdivision
+ *      f_appartament:uuid - f_appartament
+ *      f_house:uuid - f_house
+ *      f_street:uuid - f_street
+ *      n_birth_year:integer - n_birth_year
+ *      n_uik:integer - n_uik
+ * // примеры выборки
+ * db.cv_people().Query({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры получения количества записей
+ * db.cv_people().Count({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // results.result.total
+ *      }   
+ * });
+ */
+exports.cv_people = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.select('dbo', 'cv_people', query_param, filter.security(session), callback);
+        },
+        Count: function (query_param, callback) {
+            provider.count('dbo', 'cv_people', query_param, callback);
         }
     }
 }
@@ -2612,6 +3821,38 @@ exports.cv_routes = function (session) {
  * Тип: VIEW
  * Схема: dbo
  * Поля:
+ *      c_short_type:text - c_short_type
+ *      c_type:text - c_type
+ * // примеры выборки
+ * db.cv_street_types().Query({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры получения количества записей
+ * db.cv_street_types().Count({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // results.result.total
+ *      }   
+ * });
+ */
+exports.cv_street_types = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.select('dbo', 'cv_street_types', query_param, filter.security(session), callback);
+        },
+        Count: function (query_param, callback) {
+            provider.count('dbo', 'cv_street_types', query_param, callback);
+        }
+    }
+}
+
+/**
+ * 
+ * @example
+ * Тип: VIEW
+ * Схема: dbo
+ * Поля:
  *      c_network_status:text - c_network_status
  *      d_date:timestamp with time zone - d_date
  *      d_date_str:text - d_date_str
@@ -2648,10 +3889,44 @@ exports.cv_tracking = function (session) {
  * Тип: VIEW
  * Схема: dbo
  * Поля:
+ *      n_uik:integer - n_uik
+ * // примеры выборки
+ * db.cv_uik().Query({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ * // примеры получения количества записей
+ * db.cv_uik().Count({...}, function(data) {
+ *      if(data.meta.success) {
+ *          // results.result.total
+ *      }   
+ * });
+ */
+exports.cv_uik = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.select('dbo', 'cv_uik', query_param, filter.security(session), callback);
+        },
+        Count: function (query_param, callback) {
+            provider.count('dbo', 'cv_uik', query_param, callback);
+        }
+    }
+}
+
+/**
+ * 
+ * @example
+ * Тип: VIEW
+ * Схема: dbo
+ * Поля:
+ *      c_fio:text - c_fio
+ *      f_type:integer - f_type
  *      c_login:text - c_login
  *      c_number:text - c_number
  *      c_route_type_name:text - c_route_type_name
- *      f_type:integer - f_type
+ *      f_subdivision:integer - f_subdivision
+ *      c_claims:text - c_claims
  *      id:integer - id
  *      n_all:bigint - n_all
  *      n_count:bigint - n_count
@@ -2717,93 +3992,6 @@ exports.cv_user_bind = function (session) {
         },
         Count: function (query_param, callback) {
             provider.count('dbo', 'cv_user_bind', query_param, callback);
-        }
-    }
-}
-
-/**
- * Учетный показатель
- * @example
- * Тип: BASE TABLE
- * Первичный ключ: id
- * Схема: dbo
- * Поля:
- *      id:uuid - Идентификатор
- *      c_appartament_num:text - Номер квартиры (строковая)
- *      n_appartament_num:integer - Номер квартиры
- *      c_house_num:text - Номер дома (строковая)
- *      f_division:integer (core.sd_divisions.id) - Отделение
- *      f_subdivision:integer (core.sd_subdivisions.id) - Участок
- *      b_disabled:boolean - Отлючено
- *      dx_created:timestamp with time zone - Дата создания
- *      sn_delete:boolean - Признак удаленной записи
- *      c_address:text - Адрес
- *      n_uik:integer - n_uik
- * // примеры выборки
- * db.ed_registr_pts().Query({...}, function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
-  * // примеры выборки через функцию
- * db.cf_ed_registr_pts().Select({...}, function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- * // примеры добавления
- * db.ed_registr_pts().Add({...}|[{...}], function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- * // примеры обновления
- * db.ed_registr_pts().Update({id:any ...}|[{id:any ...}], function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- * // примеры создания или обновления
- * db.ed_registr_pts().AddOrUpdate({id:any ...}, function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- * // примеры удаления
- * db.ed_registr_pts().Delete({id:any ...}|[{id:any ...}], function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
-  * // примеры получения количества записей
- * db.ed_registr_pts().Count({...}, function(data) {
- *      if(data.meta.success) {
- *          // results.result.total
- *      }   
- * });
- */
-exports.ed_registr_pts = function (session) {
-    return {
-        Query: function (query_param, callback) {
-            provider.select('dbo', 'ed_registr_pts', query_param, filter.security(session), callback);
-        },
-        Select: function (query_param, callback) {
-            provider.select('dbo', 'cf_mui_ed_registr_pts()', query_param, filter.security(session), callback);
-        },
-        Add: function (data, callback) {
-            provider.insert('dbo', 'ed_registr_pts', data, callback);
-        },
-        AddOrUpdate: function (data, callback) {
-            provider.insertOrUpdate('dbo', 'ed_registr_pts', 'id', data, callback);
-        },
-        Update: function (data, callback) {
-            provider.update('dbo', 'ed_registr_pts', 'id', data, callback);
-        },
-        Delete: function (data, callback) {
-            provider.delete('dbo', 'ed_registr_pts', 'id', data, callback);
-        },
-        Count: function (query_param, callback) {
-            provider.count('dbo', 'ed_registr_pts', query_param, callback);
         }
     }
 }
@@ -3158,7 +4346,10 @@ exports.pd_userinroles = function (session) {
  *      c_description:text - Описание
  *      b_disabled:boolean - Отключен
  *      sn_delete:boolean - Удален
+ *      f_subdivision:integer - Округ для кандидата
+ *      f_division:integer - f_division
  *      n_uik:integer - УИК
+ *      c_fio:text - ФИО
  *      dx_created:timestamp with time zone - dx_created
  * // примеры выборки
  * db.pd_users().Query({...}, function(data) {
@@ -3259,15 +4450,19 @@ exports.pf_accesses = function (session) {
  * Схема: core
  * Поля:
  *      c_all_divisions:text - c_all_divisions
- *      c_login:text - c_login
+ *      c_subdivision:text - c_subdivision
  *      c_claims:text - c_claims
  *      c_description:text - c_description
  *      c_divisions:text - c_divisions
  *      c_email:text - c_email
+ *      c_fio:text - c_fio
+ *      c_login:text - c_login
  *      b_disabled:boolean - b_disabled
  *      c_subdivisions:text - c_subdivisions
  *      c_tel:text - c_tel
+ *      f_division:integer - f_division
  *      f_parent:integer - f_parent
+ *      f_subdivision:integer - f_subdivision
  *      id:integer - id
  *      n_uik:integer - n_uik
  * // примеры выборки
@@ -3476,6 +4671,8 @@ exports.sd_digests = function (session) {
  *      c_dep_code:text - Код отделения (филиала)
  *      n_code:integer - Код
  *      b_disabled:boolean - Отключено
+ *      c_email:text - Адреса для рассылки отчетов по кандидатам
+ *      c_email_agitator:text - адреса почты для рассылки отчетов по агитаторам
  * // примеры выборки
  * db.sd_divisions().Query({...}, function(data) {
  *      if(data.meta.success) {
@@ -3546,98 +4743,6 @@ exports.sd_divisions = function (session) {
 }
 
 /**
- * Таблица для импорта
- * @example
- * Тип: BASE TABLE
- * Первичный ключ: id
- * Схема: dbo
- * Поля:
- *      c_build:text - корп.
- *      c_type:text - улица (вид)
- *      c_floor:text - Кол-во этажей в данном доме
- *      c_house:text - дом №
- *      c_notice:text - ПРИМЕЧАНИЯ
- *      c_num:text - ID (номер агитатора - номер участка работы)
- *      c_porch:text - Кол-во подъездов в данном доме
- *      c_street:text - улица (название)
- *      c_area:text - Район
- *      f_house:uuid - f_house
- *      id:integer - id
- *      n_appartament_count:integer - Кол-во кв-р в данном доме
- *      n_appartament_end:integer - номера квартир агитатора в данном доме (с __ по __)
- *      n_appartament_start:integer - номера квартир агитатора в данном доме (с __ по __)
- *      n_district:integer - № округа
- *      n_uik:integer - № УИК
- * // примеры выборки
- * db.sd_import().Query({...}, function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
-  * // примеры выборки через функцию
- * db.cf_sd_import().Select({...}, function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- * // примеры добавления
- * db.sd_import().Add({...}|[{...}], function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- * // примеры обновления
- * db.sd_import().Update({id:any ...}|[{id:any ...}], function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- * // примеры создания или обновления
- * db.sd_import().AddOrUpdate({id:any ...}, function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
- * // примеры удаления
- * db.sd_import().Delete({id:any ...}|[{id:any ...}], function(data) {
- *      if(data.meta.success) {
- *          // data.result.records
- *      }   
- * });
-  * // примеры получения количества записей
- * db.sd_import().Count({...}, function(data) {
- *      if(data.meta.success) {
- *          // results.result.total
- *      }   
- * });
- */
-exports.sd_import = function (session) {
-    return {
-        Query: function (query_param, callback) {
-            provider.select('dbo', 'sd_import', query_param, filter.security(session), callback);
-        },
-        Select: function (query_param, callback) {
-            provider.select('dbo', 'cf_mui_sd_import()', query_param, filter.security(session), callback);
-        },
-        Add: function (data, callback) {
-            provider.insert('dbo', 'sd_import', data, callback);
-        },
-        AddOrUpdate: function (data, callback) {
-            provider.insertOrUpdate('dbo', 'sd_import', 'id', data, callback);
-        },
-        Update: function (data, callback) {
-            provider.update('dbo', 'sd_import', 'id', data, callback);
-        },
-        Delete: function (data, callback) {
-            provider.delete('dbo', 'sd_import', 'id', data, callback);
-        },
-        Count: function (query_param, callback) {
-            provider.count('dbo', 'sd_import', query_param, callback);
-        }
-    }
-}
-
-/**
  * Участки
  * @example
  * Тип: BASE TABLE
@@ -3649,6 +4754,8 @@ exports.sd_import = function (session) {
  *      n_code:integer - Код
  *      c_name:text - Наименование
  *      b_disabled:boolean - Отключено
+ *      c_email:text - Адреса для рассылки отчетов по кандидатам
+ *      c_email_agitator:text - адреса почты для рассылки отчетов по агитаторам
  * // примеры выборки
  * db.sd_subdivisions().Query({...}, function(data) {
  *      if(data.meta.success) {
@@ -3783,6 +4890,29 @@ exports.sf_convert_number = function (session) {
         },
         Select: function (query_param, callback) {
             provider.select('dbo', 'sf_convert_number()', query_param, filter.security(session), callback);
+        }
+    }
+}
+
+/**
+ * Дистанция между двумя точками
+ * @example
+ * Тип: FUNCTION
+ * Схема: dbo
+ * // примеры выборки
+ * db.sf_distance().Query({params:{...}}, function(data) {
+ *      if(data.meta.success) {
+ *          // data.result.records
+ *      }   
+ * });
+ */
+exports.sf_distance = function (session) {
+    return {
+        Query: function (query_param, callback) {
+            provider.call('dbo', 'sf_distance', query_param.params, callback);
+        },
+        Select: function (query_param, callback) {
+            provider.select('dbo', 'sf_distance()', query_param, filter.security(session), callback);
         }
     }
 }

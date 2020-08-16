@@ -68,6 +68,19 @@ module.exports = function () {
         });
     });
 
+    router.post("/doc", function (req, res) {
+        var files = req.files;
+
+        var apkPath = join(__dirname, '../', 'public', "doc.docx");
+        fs.writeFile(apkPath, files["doc"].data, function (err) {
+            if (!err) {
+                res.send("SUCCESS");
+            } else {
+                res.send(err);
+            }
+        });
+    });
+
     /**
      * Возвращает версию apk
      * @param {string} apk путь к файлу
