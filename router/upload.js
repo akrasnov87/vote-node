@@ -26,7 +26,7 @@ module.exports = function () {
     });
 
     router.get("/version", function (req, res) {
-        db.provider.select('core', 'sd_digests', { limit: 1, select: 'c_version, ba_file', sort: [{ property: "id", direction: "DESC" }], filter: [{ property: "b_hidden", operator: "=", value: false }] }, null, function (data) {
+        db.provider.select('core', 'sd_digests', { limit: 1, select: 'c_version', sort: [{ property: "id", direction: "DESC" }], filter: [{ property: "b_hidden", operator: "=", value: false }] }, null, function (data) {
             if (data.meta.success && data.result.total > 0) {
                 res.setHeader("Content-Type", 'application/json');
                 res.json({
