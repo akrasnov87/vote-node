@@ -89,7 +89,8 @@ exports.authorize = function (req, res) {
                 user: {
                     userId: user.id,
                     claims: user.c_claims,
-                    b_disabled: user.b_disabled
+                    b_disabled: user.b_disabled,
+                    server_date: new Date().toJSON()
                 }
             });
         }
